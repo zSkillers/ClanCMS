@@ -34,11 +34,11 @@
                     <td>{{category.updated_at | myDate}}</td>
 
                     <td>
-                        <a href="#" @click="editModal(categories)">
+                        <a href="#" @click="editModal(category)">
                             <i class="fa fa-edit blue"></i>
                         </a>
                         /
-                        <a href="#" @click="deleteCategory(categories.id)">
+                        <a href="#" @click="deleteCategory(category.id)">
                             <i class="fa fa-trash red"></i>
                         </a>
 
@@ -198,7 +198,7 @@
                                 this.form.delete('api/category/'+id).then(()=>{
                                         swal(
                                         'Deleted!',
-                                        'Your file has been deleted.',
+                                        'The category has been deleted.',
                                         'success'
                                         )
                                     Fire.$emit('AfterCreate');

@@ -87,7 +87,13 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
+      $this->authorize('isAdmin');
 
+      $category = Category::findOrFail($id);
+
+      $category->delete();
+
+      return ['message' => 'Category Deleted'];
     }
 
     public function search(){
