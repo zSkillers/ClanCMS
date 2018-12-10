@@ -15,7 +15,7 @@ class CategoriesTableSeeder extends Seeder
       for($i = 0; $i < 50; $i++) {
         DB::table('categories')->insert([
           'title' => str_random(10),
-          'description' => str_random(10).'@gmail.com',
+          'description' => str_random(10),
           'sort' => 1,
         ]);
       }

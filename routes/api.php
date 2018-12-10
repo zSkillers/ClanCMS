@@ -25,6 +25,8 @@ Route::apiResources(['user' => 'API\UserController']);
 Route::get('profile', 'API\UserController@profile');
 Route::get('findUser', 'API\UserController@search');
 Route::put('profile', 'API\UserController@updateProfile');
+Route::put('user', 'API\UserController@store');
 
 Route::apiResources(['category' => 'API\CategoryController']);
 Route::get('findCategory', 'API\CategoryController@search');
+Route::get('count', 'API\CategoryController@countTotal');

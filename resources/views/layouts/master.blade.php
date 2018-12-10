@@ -12,8 +12,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <title>zSkillers | Administrator Control Panel</title>
   <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="/css/app.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 </head>
-<body class="hold-transition sidebar-mini">
+<body class="sidebar-mini">
 <div class="wrapper" id="app">
 
   <!-- Navbar -->

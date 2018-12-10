@@ -42,6 +42,20 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
 
+        // $this->validate($request,[
+        //     'title' => 'required|string|max:191',
+        //     'description' => 'required|string|max:191',
+        //     'sort' => 'required|integer'
+        // ]);
+        // $this->validate;
+
+        return Category::create([
+            'name' => $request['title'],
+            'email' => $request['description'],
+            'sort' => $request['sort']
+        ]);
+
+
     }
 
 
@@ -76,7 +90,20 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $category = Category::findOrFail($id);
 
+        $category->validate($request,[
+            'title' => 'required|string|max:191',
+            'description' => 'required|string|max:191',
+            'sort' => 'required|int'
+        ]);
+
+        $category->update($request->all());
+        return ['message' => 'Updated the category info'];
+    }
+
+    public function countTotal() {
+      return ['count' => Category::count()];
     }
 
     /**

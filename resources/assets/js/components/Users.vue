@@ -109,6 +109,13 @@
                         <has-error :form="form" field="password"></has-error>
                     </div>
 
+                    <div class="form-group">
+                       <input v-model="form.photo" type="text" name="photo"
+                           placeholder="Photo"
+                           class="form-control" :class="{ 'is-invalid': form.errors.has('photo') }">
+                       <has-error :form="form" field="photo"></has-error>
+                   </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
