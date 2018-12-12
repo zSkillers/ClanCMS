@@ -1,41 +1,28 @@
 <template>
     <div class="container">
-        <div class="row mt-5" v-if="$gate.isAdminOrAuthor()">
-          <div class="col-md-12">
+        <div class="row mt-5">
+          <div class="col-md-12" v-for="category in categories" :key="category.id">
+                            <h3 class="card-title">{{category.title}} Table [{{category.forums.total}}]</h3>
             <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">Categories Table [{{ count }}]</h3>
-
-                <div class="card-tools">
-                  <pagination :data="categories" @pagination-change-page="getResults"></pagination>
-                </div>
-              </div>
               <!-- /.card-header -->
               <div class="card-body table-responsive p-0">
                 <table class="table table-hover center">
                   <tbody>
                     <tr>
-                        <th>ID</th>
+                        <th  v-if="$gate.isAdminOrAuthor()">ID</th>
                         <th>Title</th>
-                        <th>Description</th>
-                        <th>Sort</th>
-                        <th>Registered At</th>
-                        <th>Modify</th>
-                        <th><button class="btn btn-success page-item btn-sm" @click="newModal">Add New <i class="fas fa-user-plus fa-fw"></i></button></th>
+                        <th  v-if="$gate.isAdminOrAuthor()">Registered At</th>
+                        <th  v-if="$gate.isAdminOrAuthor()">Modify</th>
+                        <th  v-if="$gate.isAdminOrAuthor()"><button class="btn btn-success page-item btn-sm" @click="newModal">Add New <i class="fas fa-user-plus fa-fw"></i></button></th>
                   </tr>
+                    <tr v-for="forum in category.forums.data" :key="forum.id">
+                    <td  v-if="$gate.isAdminOrAuthor()">{{forum.id}}</td>
+                    <td>{{forum.title}}</td>
+                    <td  v-if="$gate.isAdminOrAuthor()">{{forum.created_at | myDate}}</td>
+                    <td  v-if="$gate.isAdminOrAuthor()">{{forum.updated_at | myDate}}</td>
 
-
-                  <tr v-for="category in categories.data" :key="categories.id">
-
-                    <td>{{category.id}}</td>
-                    <td>{{category.title}}</td>
-                    <td>{{category.description}}</td>
-                    <td>{{category.sort}}</td>
-                    <td>{{category.created_at | myDate}}</td>
-                    <td>{{category.updated_at | myDate}}</td>
-
-                    <td>
-                        <a href="#" @click="editModal(category)">
+                    <td v-if="$gate.isAdminOrAuthor()">
+                        <a href="#" @click="editModal(forum)">
                             <i class="fa fa-edit blue"></i>
                         </a>
                         /
@@ -48,18 +35,14 @@
                 </tbody></table>
               </div>
               <!-- /.card-body -->
-              <div class="card-footer">
+              <div @mouseover="changeCategoryId(category.id)" class="card-footer">
                 <div class="card-tools pull-right">
-                  <pagination :data="categories" @pagination-change-page="getResults"></pagination>
+                  <pagination :data="category.forums" @pagination-change-page="getResults"></pagination>
                 </div>
               </div>
             </div>
             <!-- /.card -->
           </div>
-        </div>
-
-        <div v-if="!$gate.isAdminOrAuthor()">
-            <not-found></not-found>
         </div>
 
     <!-- Modal -->
@@ -120,7 +103,7 @@
             return {
                 editmode: false,
                 categories : {},
-                count: {},
+                category_id: '1',
                 form: new Form({
                     id:'',
                     title : '',
@@ -136,16 +119,20 @@
 
         },
         methods: {
-          countCategory() {
-            axios.get('api/count').then(response => {
-              this.count = response.data.count;
-            });
-          },
+            changeCategoryId(id) {
+              this.category_id = id;
+            },
             getResults(page = 1) {
-                        axios.get('api/category?page=' + page)
-                            .then(response => {
-                                this.categories = response.data;
-                            });
+              var categoryId = this.category_id;
+                  axios.get('api/forum/category/' + categoryId + '?page=' + page)
+                      .then(response => {
+                        this.categories.forEach(function(entry) {
+                          if (entry.id == categoryId) {
+                            entry.forums = response.data;
+                          }
+                        });
+                          //this.categories[category_id].forums = response;
+                        });
                 },
             updateCategory(){
                 this.$Progress.start();
@@ -205,10 +192,8 @@
                     })
             },
             loadCategories(){
-                if(this.$gate.isAdminOrAuthor()){
                     axios.get("api/category").then(({ data }) => (this.categories = data));
-                    axios.get("api/count").then(({ data }) => (this.count = data.count));
-                }
+                    console.log(this.categories);
             },
 
             createCategory(){
@@ -216,18 +201,18 @@
 
                 this.form.post('api/category')
                 .then(()=>{
-                    Fire.$emit('AfterCreate');
-                    $('#addNew').modal('hide')
-
-                    toast({
-                        type: 'success',
-                        title: 'Category Created in successfully'
-                        })
-                    this.$Progress.finish();
-                    swal("Failed!", "There was something wronge.", "warning");
+                  // success
+                  $('#addNew').modal('hide');
+                   swal(
+                      'Created!',
+                      'Category has been created.',
+                      'success'
+                      )
+                      this.$Progress.finish();
+                       Fire.$emit('AfterCreate');
                 })
                 .catch(()=>{
-
+                    this.$Progress.fail();
                 })
             }
         },
@@ -239,9 +224,9 @@
                     this.categories = data.data
                 })
                 .catch(() => {
-
+                    this.$Progress.fail();
                 })
-            })
+            });
            this.loadCategories();
            Fire.$on('AfterCreate',() => {
                this.loadCategories();

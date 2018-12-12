@@ -35,6 +35,10 @@ class UserController extends Controller
 
     }
 
+    public function countTotal() {
+      return ['count' => User::count()];
+    }
+
     /**
      * Store a newly created resource in storage.
      *

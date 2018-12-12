@@ -17,4 +17,9 @@ class Category extends Model
     protected $fillable = [
         'title', 'description', 'sort'
     ];
+
+    public function forums()
+    {
+      return $this->hasMany('App\Forum');
+    }
 }

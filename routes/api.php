@@ -21,12 +21,22 @@ Route::middleware('auth:api')->get('/category', function (Request $request) {
     return $request->category();
 });
 
-Route::apiResources(['user' => 'API\UserController']);
+Route::middleware('auth:api')->get('/forum', function (Request $request) {
+    return $request->forum();
+});
+
+Route::get('forum/category/{category_id}', 'API\ForumController@findByCategoryId');
+
+Route::get('user/count', 'API\UserController@countTotal');
 Route::get('profile', 'API\UserController@profile');
 Route::get('findUser', 'API\UserController@search');
 Route::put('profile', 'API\UserController@updateProfile');
-Route::put('user', 'API\UserController@store');
 
-Route::apiResources(['category' => 'API\CategoryController']);
+Route::get('category/count', 'API\CategoryController@countTotal');
 Route::get('findCategory', 'API\CategoryController@search');
-Route::get('count', 'API\CategoryController@countTotal');
+
+Route::apiResources(['user' => 'API\UserController']);
+Route::apiResources(['category' => 'API\CategoryController']);
+Route::apiResources(['forum' => 'API\ForumController']);
+
+Route::get('dashboard', 'API\DashboardController@index');

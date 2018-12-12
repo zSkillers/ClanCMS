@@ -4,13 +4,51 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Users Table</h3>
+                <h3 class="card-title">Users Table [{{count}}]</h3>
 
                 <div class="card-tools">
-                    <button class="btn btn-success" @click="newModal">Add New <i class="fas fa-user-plus fa-fw"></i></button>
+                    <button class="btn btn-success" @click="addNewUser">Add New <i class="fas fa-user-plus fa-fw"></i></button>
                 </div>
               </div>
               <!-- /.card-header -->
+
+              <div class="card-body table-responsive p-0" v-if="newUsers.length > 0">
+                <table class="table table-hover">
+                  <tbody>
+
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Password</th>
+                        <th>Type</th>
+                        <th>Actions</th>
+                  </tr>
+
+                  <tr v-if="newUsers.length > 0" v-for="user in newUsers">
+                    <td><input type="text" placeholder="Name" /></td>
+                    <td><input type="text" placeholder="Email" /></td>
+                    <td><input type="text" placeholder="Password" /></td>
+                    <td>
+                      <select name="type">
+                          <option value="">Select User Role</option>
+                          <option value="admin">Admin</option>
+                          <option value="user">Standard User</option>
+                          <option value="author">Author</option>
+                      </select>
+                    </td>
+                    <td>
+                      <a href="#" @click="editModal(user)">
+                                                <i class="fa fa-save blue"></i>
+                                            </a>
+                                            /
+                                            <a href="#" @click="deleteUser(user.id)">
+                                                <i class="fa fa-trash red"></i>
+                                            </a>
+</td>
+                </tr>
+                </tbody></table>
+              </div>
+
               <div class="card-body table-responsive p-0">
                 <table class="table table-hover">
                   <tbody>
@@ -20,7 +58,7 @@
                         <th>Email</th>
                         <th>Type</th>
                         <th>Registered At</th>
-                        <th>Modify</th>
+                        <th v-if="$gate.isAdminOrAuthor()">Modify</th>
                   </tr>
 
 
@@ -32,7 +70,7 @@
                     <td>{{user.type | upText}}</td>
                     <td>{{user.created_at | myDate}}</td>
 
-                    <td>
+                    <td v-if="$gate.isAdminOrAuthor()">
                         <a href="#" @click="editModal(user)">
                             <i class="fa fa-edit blue"></i>
                         </a>
@@ -140,6 +178,8 @@
             return {
                 editmode: false,
                 users : {},
+                newUsers : [],
+                count: '',
                 form: new Form({
                     id:'',
                     name : '',
@@ -152,6 +192,14 @@
             }
         },
         methods: {
+          addNewUser() {
+            this.newUsers.push('something');
+          },
+          countUser() {
+            axios.get('api/user/count').then(response => {
+              this.count = response.data.count;
+            });
+          },
             getResults(page = 1) {
                         axios.get('api/user?page=' + page)
                             .then(response => {
@@ -218,6 +266,7 @@
             loadUsers(){
                 if(this.$gate.isAdminOrAuthor()){
                     axios.get("api/user").then(({ data }) => (this.users = data));
+                    axios.get("api/user/count").then(({ data }) => (this.count = data.count));
                 }
             },
 
