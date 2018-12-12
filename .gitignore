@@ -20,5 +20,3 @@ artisan
 public/.htaccess
 .gitattributes
 package-lock.json
-node_modules/*
-storage/framework/*
