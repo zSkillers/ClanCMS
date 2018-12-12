@@ -1,44 +1,32 @@
 <template>
     <div class="container">
-        <div class="row mt-5" v-if="$gate.isAdminOrAuthor()">
-          <div class="col-md-12">
+        <div class="row mt-5">
+          <div class="col-md-12" v-for="category in categories" :key="category.id">
+                            <h3 class="card-title">{{category.title}} Table [{{category.forums.total}}]</h3>
             <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">Categories Table</h3>
-
-                <div class="card-tools">
-                    <button class="btn btn-success" @click="newModal">Add New <i class="fas fa-user-plus fa-fw"></i></button>
-                </div>
-              </div>
               <!-- /.card-header -->
               <div class="card-body table-responsive p-0">
-                <table class="table table-hover">
+                <table class="table table-hover center">
                   <tbody>
                     <tr>
-                        <th>ID</th>
+                        <th  v-if="$gate.isAdminOrAuthor()">ID</th>
                         <th>Title</th>
-                        <th>Description</th>
-                        <th>Sort</th>
-                        <th>Registered At</th>
-                        <th>Modify</th>
+                        <th  v-if="$gate.isAdminOrAuthor()">Registered At</th>
+                        <th  v-if="$gate.isAdminOrAuthor()">Modify</th>
+                        <th  v-if="$gate.isAdminOrAuthor()"><button class="btn btn-success page-item btn-sm" @click="newModal">Add New <i class="fas fa-user-plus fa-fw"></i></button></th>
                   </tr>
+                    <tr v-for="forum in category.forums.data" :key="forum.id">
+                    <td  v-if="$gate.isAdminOrAuthor()">{{forum.id}}</td>
+                    <td>{{forum.title}}</td>
+                    <td  v-if="$gate.isAdminOrAuthor()">{{forum.created_at | myDate}}</td>
+                    <td  v-if="$gate.isAdminOrAuthor()">{{forum.updated_at | myDate}}</td>
 
-
-                  <tr v-for="category in categories.data" :key="categories.id">
-
-                    <td>{{category.id}}</td>
-                    <td>{{category.title}}</td>
-                    <td>{{category.description}}</td>
-                    <td>{{category.sort}}</td>
-                    <td>{{category.created_at | myDate}}</td>
-                    <td>{{category.updated_at | myDate}}</td>
-
-                    <td>
-                        <a href="#" @click="editModal(categories)">
+                    <td v-if="$gate.isAdminOrAuthor()">
+                        <a href="#" @click="editModal(forum)">
                             <i class="fa fa-edit blue"></i>
                         </a>
                         /
-                        <a href="#" @click="deleteCategory(categories.id)">
+                        <a href="#" @click="deleteCategory(category.id)">
                             <i class="fa fa-trash red"></i>
                         </a>
 
@@ -47,16 +35,14 @@
                 </tbody></table>
               </div>
               <!-- /.card-body -->
-              <div class="card-footer">
-                  <pagination :data="categories" @pagination-change-page="getResults"></pagination>
+              <div @mouseover="changeCategoryId(category.id)" class="card-footer">
+                <div class="card-tools pull-right">
+                  <pagination :data="category.forums" @pagination-change-page="getResults"></pagination>
+                </div>
               </div>
             </div>
             <!-- /.card -->
           </div>
-        </div>
-
-        <div v-if="!$gate.isAdminOrAuthor()">
-            <not-found></not-found>
         </div>
 
     <!-- Modal -->
@@ -64,7 +50,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" v-show="!editmode" id="addNewLabel">Add New</h5>
+                    <h5 class="modal-title" v-show="!editmode" id="addNewLabel">Add New Category</h5>
                     <h5 class="modal-title" v-show="editmode" id="addNewLabel">Update Categories Info</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -73,41 +59,24 @@
                 <form @submit.prevent="editmode ? updateCategory() : createCategory()">
                 <div class="modal-body">
                      <div class="form-group">
-                        <input v-model="form.name" type="text" name="name"
-                            placeholder="Name"
-                            class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
-                        <has-error :form="form" field="name"></has-error>
+                        <input v-model="form.title" type="text" name="title"
+                            placeholder="Title"
+                            class="form-control" :class="{ 'is-invalid': form.errors.has('title') }">
+                        <has-error :form="form" field="title"></has-error>
                     </div>
 
                      <div class="form-group">
-                        <input v-model="form.email" type="email" name="email"
-                            placeholder="Email Address"
-                            class="form-control" :class="{ 'is-invalid': form.errors.has('email') }">
-                        <has-error :form="form" field="email"></has-error>
+                        <input v-model="form.description" type="text" name="decription"
+                            placeholder="Description"
+                            class="form-control" :class="{ 'is-invalid': form.errors.has('description') }">
+                        <has-error :form="form" field="description"></has-error>
                     </div>
 
                      <div class="form-group">
-                        <textarea v-model="form.bio" name="bio" id="bio"
-                        placeholder="Short bio for user (Optional)"
-                        class="form-control" :class="{ 'is-invalid': form.errors.has('bio') }"></textarea>
-                        <has-error :form="form" field="bio"></has-error>
-                    </div>
-
-
-                    <div class="form-group">
-                        <select name="type" v-model="form.type" id="type" class="form-control" :class="{ 'is-invalid': form.errors.has('type') }">
-                            <option value="">Select User Role</option>
-                            <option value="admin">Admin</option>
-                            <option value="user">Standard User</option>
-                            <option value="author">Author</option>
-                        </select>
-                        <has-error :form="form" field="type"></has-error>
-                    </div>
-
-                    <div class="form-group">
-                        <input v-model="form.password" type="password" name="password" id="password"
-                        class="form-control" :class="{ 'is-invalid': form.errors.has('password') }">
-                        <has-error :form="form" field="password"></has-error>
+                        <input v-model="form.sort" type="number" name="sort"
+                        placeholder="Sort Number"
+                        class="form-control" :class="{ 'is-invalid': form.errors.has('sort') }"></input>
+                        <has-error :form="form" field="sort"></has-error>
                     </div>
 
                 </div>
@@ -134,6 +103,7 @@
             return {
                 editmode: false,
                 categories : {},
+                category_id: '1',
                 form: new Form({
                     id:'',
                     title : '',
@@ -144,12 +114,25 @@
                 })
             }
         },
+        mounted() {
+          //do something after mounting vue instance
+
+        },
         methods: {
+            changeCategoryId(id) {
+              this.category_id = id;
+            },
             getResults(page = 1) {
-                        axios.get('api/category?page=' + page)
-                            .then(response => {
-                                this.categories = response.data;
-                            });
+              var categoryId = this.category_id;
+                  axios.get('api/forum/category/' + categoryId + '?page=' + page)
+                      .then(response => {
+                        this.categories.forEach(function(entry) {
+                          if (entry.id == categoryId) {
+                            entry.forums = response.data;
+                          }
+                        });
+                          //this.categories[category_id].forums = response;
+                        });
                 },
             updateCategory(){
                 this.$Progress.start();
@@ -160,7 +143,7 @@
                     $('#addNew').modal('hide');
                      swal(
                         'Updated!',
-                        'Information has been updated.',
+                        'Category has been updated.',
                         'success'
                         )
                         this.$Progress.finish();
@@ -198,7 +181,7 @@
                                 this.form.delete('api/category/'+id).then(()=>{
                                         swal(
                                         'Deleted!',
-                                        'Your file has been deleted.',
+                                        'The category has been deleted.',
                                         'success'
                                         )
                                     Fire.$emit('AfterCreate');
@@ -209,9 +192,8 @@
                     })
             },
             loadCategories(){
-                if(this.$gate.isAdminOrAuthor()){
                     axios.get("api/category").then(({ data }) => (this.categories = data));
-                }
+                    console.log(this.categories);
             },
 
             createCategory(){
@@ -219,18 +201,18 @@
 
                 this.form.post('api/category')
                 .then(()=>{
-                    Fire.$emit('AfterCreate');
-                    $('#addNew').modal('hide')
-
-                    toast({
-                        type: 'success',
-                        title: 'User Created in successfully'
-                        })
-                    this.$Progress.finish();
-                    swal("Failed!", "There was something wronge.", "warning");
+                  // success
+                  $('#addNew').modal('hide');
+                   swal(
+                      'Created!',
+                      'Category has been created.',
+                      'success'
+                      )
+                      this.$Progress.finish();
+                       Fire.$emit('AfterCreate');
                 })
                 .catch(()=>{
-
+                    this.$Progress.fail();
                 })
             }
         },
@@ -242,9 +224,9 @@
                     this.categories = data.data
                 })
                 .catch(() => {
-
+                    this.$Progress.fail();
                 })
-            })
+            });
            this.loadCategories();
            Fire.$on('AfterCreate',() => {
                this.loadCategories();

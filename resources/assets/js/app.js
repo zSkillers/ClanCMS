@@ -5,7 +5,8 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./bootstrap');
+ import './bootstrap';
+
 
 window.Vue = require('vue');
 import moment from 'moment';
@@ -13,7 +14,6 @@ import { Form, HasError, AlertError } from 'vform';
 
 import Gate from "./Gate";
 Vue.prototype.$gate = new Gate(window.user);
-
 
 import swal from 'sweetalert2'
 window.swal = swal;
@@ -34,9 +34,8 @@ Vue.component(AlertError.name, AlertError)
 
 Vue.component('pagination', require('laravel-vue-pagination'));
 
-
 import VueRouter from 'vue-router'
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 import VueProgressBar from 'vue-progressbar'
 Vue.use(VueProgressBar, {

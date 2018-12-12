@@ -12,8 +12,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <title>zSkillers | Administrator Control Panel</title>
   <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="/css/app.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 </head>
-<body class="hold-transition sidebar-mini">
+<body class="sidebar-mini">
 <div class="wrapper" id="app">
 
   <!-- Navbar -->
@@ -80,7 +82,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </router-link>
             </li>
 
-            @can('isAdmin')
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fa fa-cog green"></i>
@@ -110,7 +111,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </li>
             </ul>
           </li>
-
+            @can('isAdmin')
           <li class="nav-item">
                 <router-link to="/developer" class="nav-link">
                     <i class="nav-icon fas fa-cogs"></i>
@@ -170,10 +171,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <footer class="main-footer">
     <!-- To the right -->
     <div class="float-right d-none d-sm-inline">
-      Anything you want
+      ClanCMS 1.0
     </div>
     <!-- Default to the left -->
-    <strong>Copyright &copy; 2014-2018 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
+    <strong>Copyright &copy; 2018 <a href="https://zskillers.co">zskillers.com</a>.</strong> All rights reserved.
   </footer>
 </div>
 <!-- ./wrapper -->

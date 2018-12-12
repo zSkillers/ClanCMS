@@ -35,6 +35,10 @@ class UserController extends Controller
 
     }
 
+    public function countTotal() {
+      return ['count' => User::count()];
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -47,7 +51,8 @@ class UserController extends Controller
         $this->validate($request,[
             'name' => 'required|string|max:191',
             'email' => 'required|string|email|max:191|unique:users',
-            'password' => 'required|string|min:6'
+            'password' => 'required|string|min:6',
+            'photo' => 'required|string'
         ]);
 
         return User::create([

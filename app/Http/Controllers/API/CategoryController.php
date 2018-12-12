@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Categories as CategoryModel;
 use Illuminate\Support\Facades\DB;
 use App\Category as Category;
+use App\Forum as Forum;
 
 
 class CategoryController extends Controller
@@ -19,7 +20,7 @@ class CategoryController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api');
+        //$this->middleware('auth:api');
     }
 
     /**
@@ -29,8 +30,12 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return Category::latest()->paginate(10);
-        //return DB::table('categories')->paginate(15);
+      $categories = Category::all();
+      foreach ($categories as $key => $category) {
+        $category['forums'] = Forum::where('category_id', $category['id'])->paginate(5);
+      }
+
+      return $categories;
     }
 
     /**
@@ -42,18 +47,20 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
 
-    }
+        $this->validate($request,[
+            'title' => 'required|string|max:191',
+            'description' => 'required|string|max:191',
+            'sort' => 'required|integer'
+        ]);
+        // $this->validate;
 
+        Category::create([
+            'title' => $request['title'],
+            'description' => $request['description'],
+            'sort' => $request['sort']
+        ]);
 
-    public function updateProfile(Request $request)
-    {
-
-    }
-
-
-    public function profile()
-    {
-
+        return ['message' => 'Created Category successful.'];
     }
 
     /**
@@ -76,7 +83,20 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $category = Category::findOrFail($id);
 
+        $this->validate($request,[
+            'title' => 'required|string|max:191',
+            'description' => 'required|string|max:191',
+            'sort' => 'required|integer'
+        ]);
+
+        $category->update($request->all());
+        return ['message' => 'Updated the category info'];
+    }
+
+    public function countTotal() {
+      return ['count' => Category::count()];
     }
 
     /**
@@ -87,7 +107,13 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
+      $this->authorize('isAdmin');
 
+      $category = Category::findOrFail($id);
+
+      $category->delete();
+
+      return ['message' => 'Category Deleted'];
     }
 
     public function search(){
