@@ -25,6 +25,8 @@ Route::middleware('auth:api')->get('/forum', function (Request $request) {
     return $request->forum();
 });
 
+Route::get('forum/{forum_name}/{forum_id}', 'API\ForumController@findByForumID');
+
 Route::get('forum/category/{category_id}', 'API\ForumController@findByCategoryId');
 
 Route::get('user/count', 'API\UserController@countTotal');
