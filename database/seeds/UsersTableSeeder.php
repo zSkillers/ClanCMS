@@ -17,6 +17,8 @@ class UsersTableSeeder extends Seeder
           'name' => str_random(10),
           'email' => str_random(10).'@gmail.com',
           'password' => bcrypt('secret'),
+          'created_at' => \DB::raw('CURRENT_TIMESTAMP'),
+          'updated_at' => \DB::raw('CURRENT_TIMESTAMP')
         ]);
       }
     }
