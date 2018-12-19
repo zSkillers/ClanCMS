@@ -24,12 +24,12 @@
                         <th>Actions</th>
                   </tr>
 
-                  <tr v-if="newUsers.length > 0" v-for="user in newUsers">
-                    <td><input type="text" placeholder="Name" /></td>
-                    <td><input type="text" placeholder="Email" /></td>
-                    <td><input type="text" placeholder="Password" /></td>
+                  <tr v-if="newUsers.length > 0" v-for="user in newUsers"  :key="user.hashId">
+                    <td><input type="text" placeholder="Name" v-model="user.name"/></td>
+                    <td><input type="text" placeholder="Email" v-model="user.email"/></td>
+                    <td><input type="text" placeholder="Password" v-model="user.password"/></td>
                     <td>
-                      <select name="type">
+                      <select name="type" v-model="user.type">
                           <option value="">Select User Role</option>
                           <option value="admin">Admin</option>
                           <option value="user">Standard User</option>
@@ -37,14 +37,14 @@
                       </select>
                     </td>
                     <td>
-                      <a href="#" @click="editModal(user)">
+                      <a href="#" @click="saveNewUser(user)">
                                                 <i class="fa fa-save blue"></i>
                                             </a>
                                             /
-                                            <a href="#" @click="deleteUser(user.id)">
+                                            <a href="#" @click="removeNewUser(user)">
                                                 <i class="fa fa-trash red"></i>
                                             </a>
-</td>
+                    </td>
                 </tr>
                 </tbody></table>
               </div>
@@ -192,8 +192,20 @@
             }
         },
         methods: {
-          addNewUser() {
-            this.newUsers.push('something');
+          removeNewUser(user){
+            this.newUsers.forEach(function(item, index, object) {
+              if (item == user) {
+                object.splice(index, 1);
+              }
+            });
+          },
+          addNewUser(){
+            this.newUsers.push({
+              name : '',
+              email : '',
+              password : '',
+              type : ''
+            });
           },
           countUser() {
             axios.get('api/user/count').then(response => {
@@ -269,7 +281,28 @@
                     axios.get("api/user/count").then(({ data }) => (this.count = data.count));
                 }
             },
-
+            saveNewUser(user){
+              axios({method: 'post',
+                url: 'api/user',
+                  data: {
+                    name: user.name,
+                    email: user.email,
+                    password: user.password,
+                    type: user.type
+                  }})
+              .then(function (response) {
+                toast({
+                    type: 'success',
+                    title: 'User Created successfully'
+                    })
+              })
+              .catch(function (response){
+                console.log(response);
+                swal("Failed!", "Something went wrong!", "warning");
+              });
+              this.loadUsers();
+              this.removeNewUser(user);
+            },
             createUser(){
                 this.$Progress.start();
 
