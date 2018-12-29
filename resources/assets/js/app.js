@@ -5,8 +5,7 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
- import './bootstrap';
-
+import './bootstrap';
 
 window.Vue = require('vue');
 import moment from 'moment';
@@ -14,7 +13,6 @@ import { Form, HasError, AlertError } from 'vform';
 
 import Gate from "./Gate";
 Vue.prototype.$gate = new Gate(window.user);
-
 import swal from 'sweetalert2'
 window.swal = swal;
 
@@ -26,7 +24,6 @@ const toast = swal.mixin({
 });
 
 window.toast = toast;
-
 
 window.Form = Form;
 Vue.component(HasError.name, HasError)
@@ -50,6 +47,9 @@ let routes = [
     { path: '/users', component: require('./components/Users.vue') },
     { path: '/profile', component: require('./components/Profile.vue') },
     { path: '/category', component: require('./components/Categories.vue') },
+    { path: '/forum', component: require('./components/Forum.vue') },
+    { path: '/forum/*', component: require('./components/Forum.vue') },
+    { path: '/forum/*/*', component: require('./components/Forum.vue') },
     { path: '*', component: require('./components/NotFound.vue') }
   ]
 

@@ -17,7 +17,7 @@
                   </tr>
                     <tr v-for="forum in category.forums.data" :key="forum.id">
                     <td  v-if="$gate.isAdminOrAuthor()">{{forum.id}}</td>
-                    <td>{{forum.title}}</td>
+                    <td><router-link :to="'forum/' + forum.title + '/' + forum.id">{{forum.title}}</router-link></td>
                     <td  v-if="$gate.isAdminOrAuthor()">{{forum.created_at | myDate}}</td>
                     <td  v-if="$gate.isAdminOrAuthor()">{{forum.updated_at | myDate}}</td>
 
