@@ -120,6 +120,10 @@ class UserController extends Controller
         //
     }
 
+    public function getUserById(Request $request) {
+      return User::findOrFail($request['userid']);
+    }
+
     /**
      * Update the specified resource in storage.
      *
