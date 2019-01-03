@@ -10,7 +10,7 @@ import './bootstrap';
 window.Vue = require('vue');
 import moment from 'moment';
 import { Form, HasError, AlertError } from 'vform';
-
+Vue.prototype.$site_url_address = 'http://127.0.0.1:8000/';
 import Gate from "./Gate";
 Vue.prototype.$gate = new Gate(window.user);
 import swal from 'sweetalert2'
@@ -47,9 +47,7 @@ let routes = [
     { path: '/users', component: require('./components/Users.vue') },
     { path: '/profile', component: require('./components/Profile.vue') },
     { path: '/category', component: require('./components/Categories.vue') },
-    { path: '/forum', component: require('./components/Forum.vue') },
-    { path: '/forum/*', component: require('./components/Forum.vue') },
-    { path: '/forum/*/*', component: require('./components/Forum.vue') },
+    { path: '/forum/:forum_name/:forum_id', component: require('./components/ThreadList.vue') },
     { path: '*', component: require('./components/NotFound.vue') }
   ]
 
@@ -105,7 +103,7 @@ const app = new Vue({
     el: '#app',
     router,
     data:{
-        search: ''
+        search: '',
     },
     methods:{
         searchit: _.debounce(() => {
