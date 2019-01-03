@@ -12,7 +12,6 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -30,9 +29,10 @@ Route::middleware('auth:api')->get('/thread', function (Request $request) {
 });
 
 Route::get('forum/category/{category_id}', 'API\ForumController@findByCategoryId');
-Route::get('forum/{forum_name}/{forum_id}', 'API\ThreadController@findThreadsByForumId');
+Route::get('threads/{forum_id}', 'API\ThreadController@findThreadsByForumId');
 
 Route::get('user/count', 'API\UserController@countTotal');
+Route::get('user/{userid}', 'API\UserController@getUserById');
 Route::get('profile', 'API\UserController@profile');
 Route::get('findUser', 'API\UserController@search');
 Route::put('profile', 'API\UserController@updateProfile');
