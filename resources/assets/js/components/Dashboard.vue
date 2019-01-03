@@ -101,7 +101,7 @@ import SmallBoxMoreInfo from './Widgets/SmallBoxMoreInfo.vue'
       },
       methods: {
         loadSetting() {
-          axios.get('api/dashboard').then(response => {
+          axios.get(this.$site_url_address + 'api/dashboard').then(response => {
             this.widgetInfo = response.data;
             console.log(this.widgetInfo);
                       console.log(this.widgetInfo.userCount);

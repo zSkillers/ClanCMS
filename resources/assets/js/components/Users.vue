@@ -208,12 +208,12 @@
             });
           },
           countUser() {
-            axios.get('api/user/count').then(response => {
+            axios.get(this.$site_url_address + 'api/user/count').then(response => {
               this.count = response.data.count;
             });
           },
             getResults(page = 1) {
-                        axios.get('api/user?page=' + page)
+                        axios.get(this.$site_url_address + 'api/user?page=' + page)
                             .then(response => {
                                 this.users = response.data;
                             });
@@ -221,7 +221,7 @@
             updateUser(){
                 this.$Progress.start();
                 // console.log('Editing data');
-                this.form.put('api/user/'+this.form.id)
+                this.form.put(this.$site_url_address + 'api/user/'+this.form.id)
                 .then(() => {
                     // success
                     $('#addNew').modal('hide');
@@ -262,7 +262,7 @@
 
                         // Send request to the server
                          if (result.value) {
-                                this.form.delete('api/user/'+id).then(()=>{
+                                this.form.delete(this.$site_url_address + 'api/user/'+id).then(()=>{
                                         swal(
                                         'Deleted!',
                                         'Your file has been deleted.',
@@ -277,13 +277,13 @@
             },
             loadUsers(){
                 if(this.$gate.isAdminOrAuthor()){
-                    axios.get("api/user").then(({ data }) => (this.users = data));
-                    axios.get("api/user/count").then(({ data }) => (this.count = data.count));
+                    axios.get(this.$site_url_address + "api/user").then(({ data }) => (this.users = data));
+                    axios.get(this.$site_url_address + "api/user/count").then(({ data }) => (this.count = data.count));
                 }
             },
             saveNewUser(user){
               axios({method: 'post',
-                url: 'api/user',
+                url: this.$site_url_address + 'api/user',
                   data: {
                     name: user.name,
                     email: user.email,
@@ -306,7 +306,7 @@
             createUser(){
                 this.$Progress.start();
 
-                this.form.post('api/user')
+                this.form.post(this.$site_url_address + 'api/user')
                 .then(()=>{
                     Fire.$emit('AfterCreate');
                     $('#addNew').modal('hide')
@@ -326,7 +326,7 @@
         created() {
             Fire.$on('searching',() => {
                 let query = this.$parent.search;
-                axios.get('api/findUser?q=' + query)
+                axios.get(this.$site_url_address + 'api/findUser?q=' + query)
                 .then((data) => {
                     this.users = data.data
                 })

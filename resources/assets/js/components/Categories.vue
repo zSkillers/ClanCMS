@@ -124,7 +124,7 @@
             },
             getResults(page = 1) {
               var categoryId = this.category_id;
-                  axios.get('api/forum/category/' + categoryId + '?page=' + page)
+                  axios.get(this.$site_url_address + 'api/forum/category/' + categoryId + '?page=' + page)
                       .then(response => {
                         this.categories.forEach(function(entry) {
                           if (entry.id == categoryId) {
@@ -137,7 +137,7 @@
             updateCategory(){
                 this.$Progress.start();
                 // console.log('Editing data');
-                this.form.put('api/category/'+this.form.id)
+                this.form.put(this.$site_url_address + 'api/category/'+this.form.id)
                 .then(() => {
                     // success
                     $('#addNew').modal('hide');
@@ -178,7 +178,7 @@
 
                         // Send request to the server
                          if (result.value) {
-                                this.form.delete('api/category/'+id).then(()=>{
+                                this.form.delete(this.$site_url_address + 'api/category/'+id).then(()=>{
                                         swal(
                                         'Deleted!',
                                         'The category has been deleted.',
@@ -192,14 +192,14 @@
                     })
             },
             loadCategories(){
-                    axios.get("api/category").then(({ data }) => (this.categories = data));
+                    axios.get(this.$site_url_address + "api/category").then(({ data }) => (this.categories = data));
                     console.log(this.categories);
             },
 
             createCategory(){
                 this.$Progress.start();
 
-                this.form.post('api/category')
+                this.form.post(this.$site_url_address + 'api/category')
                 .then(()=>{
                   // success
                   $('#addNew').modal('hide');
@@ -219,7 +219,7 @@
         created() {
             Fire.$on('searching',() => {
                 let query = this.$parent.search;
-                axios.get('api/findCategory?q=' + query)
+                axios.get(this.$site_url_address + 'api/findCategory?q=' + query)
                 .then((data) => {
                     this.categories = data.data
                 })
