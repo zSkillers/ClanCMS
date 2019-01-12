@@ -11,7 +11,13 @@
           </thead>
           <tbody>
             <template v-for="thread in threads.data" >
-              <postbit :title="thread.title" :userid="thread.user_id" :replycount="thread.id"></postbit>
+              <postbit
+              :title="thread.title"
+              :titleid="thread.id"
+              :username="thread.user.name"
+              :url="'thread/' + thread.title + '/' + thread.titleid"
+              :replycount="thread.id"
+              ></postbit>
             </template><!-- /.template -->
           </tbody>
         </table>
