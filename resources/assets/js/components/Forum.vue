@@ -1,86 +1,238 @@
 <template>
     <div class="container">
-      <br />
+        <div class="row mt-5">
+          <div class="col-md-12" v-for="category in categories" :key="category.id">
+                            <h3 class="card-title">{{category.title}} Table [{{category.forums.total}}]</h3>
+            <div class="card">
+              <!-- /.card-header -->
+              <div class="card-body table-responsive p-0">
+                <table class="table table-hover center">
+                  <tbody>
+                    <tr>
+                        <th  v-if="$gate.isAdminOrAuthor()">ID</th>
+                        <th>Title</th>
+                        <th  v-if="$gate.isAdminOrAuthor()">Registered At</th>
+                        <th  v-if="$gate.isAdminOrAuthor()">Modify</th>
+                        <th  v-if="$gate.isAdminOrAuthor()"><button class="btn btn-success page-item btn-sm" @click="newModal">Add New <i class="fas fa-user-plus fa-fw"></i></button></th>
+                  </tr>
+                    <tr v-for="forum in category.forums.data" :key="forum.id">
+                    <td  v-if="$gate.isAdminOrAuthor()">{{forum.id}}</td>
+                    <td><router-link :to="'forum/' + forum.title + '/' + forum.id">{{forum.title}}</router-link></td>
+                    <td  v-if="$gate.isAdminOrAuthor()">{{forum.created_at | myDate}}</td>
+                    <td  v-if="$gate.isAdminOrAuthor()">{{forum.updated_at | myDate}}</td>
 
-      <div class="col-md-6">
-                      <!-- DIRECT CHAT WARNING -->
-                      <div class="box box-primary box-solid direct-chat direct-chat-primary">
-                          <div class="box-header">
-                              <h3 class="box-title">Direct Chat in a Solid Box</h3>
-                              <div class="box-tools pull-right">
-                                  <span data-toggle="tooltip" title="3 New Messages" class="badge bg-light-blue">3</span>
-                                  <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                                  <button class="btn btn-box-tool" data-toggle="tooltip" title="Contacts" data-widget="chat-pane-toggle">
-                                      <i class="fa fa-comments"></i></button>
-                                  <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                              </div>
-                          </div><!-- /.box-header -->
-                          <div class="box-body">
-                              <!-- Conversations are loaded here -->
-                              <div class="direct-chat-messages">
-                                  <!-- Message. Default to the left -->
-                                  <div class="direct-chat-msg">
-                                      <div class="direct-chat-info clearfix">
-                                          <span class="direct-chat-name pull-left">Alexander Pierce</span>
-                                          <span class="direct-chat-timestamp pull-right">23 Jan 2:00 pm</span>
-                                      </div><!-- /.direct-chat-info -->
-                                      <img class="direct-chat-img" src="https://adminlte.io/themes/AdminLTE/dist/img/user1-128x128.jpg" alt="message user image">
-                                      <!-- /.direct-chat-img -->
-                                      <div class="direct-chat-text">
-                                          Is this template really for free? That's unbelievable!
-                                      </div><!-- /.direct-chat-text -->
-                                  </div><!-- /.direct-chat-msg -->
+                    <td v-if="$gate.isAdminOrAuthor()">
+                        <a href="#" @click="editModal(forum)">
+                            <i class="fa fa-edit blue"></i>
+                        </a>
+                        /
+                        <a href="#" @click="deleteCategory(category.id)">
+                            <i class="fa fa-trash red"></i>
+                        </a>
 
-                                  <!-- Message to the right -->
-                                  <div class="direct-chat-msg right">
-                                      <div class="direct-chat-info clearfix">
-                                          <span class="direct-chat-name pull-right">Sarah Bullock</span>
-                                          <span class="direct-chat-timestamp pull-left">23 Jan 2:05 pm</span>
-                                      </div><!-- /.direct-chat-info -->
-                                      <img class="direct-chat-img" src="https://adminlte.io/themes/AdminLTE/dist/img/user1-128x128.jpg" alt="message user image">
-                                      <!-- /.direct-chat-img -->
-                                      <div class="direct-chat-text">
-                                          You better believe it!
-                                      </div><!-- /.direct-chat-text -->
-                                  </div><!-- /.direct-chat-msg -->
-                              </div><!--/.direct-chat-messages-->
-                          </div><!-- /.box-body -->
-                          <div class="box-footer">
-                              <form action="#" method="post">
-                                  <div class="input-group">
-                                      <input type="text" name="message" placeholder="Type Message ..." class="form-control">
-                                      <span class="input-group-btn">
-                      <button type="button" class="btn btn-primary btn-flat">Send</button>
-                    </span>
-                                  </div>
-                              </form>
-                          </div><!-- /.box-footer-->
-                      </div><!--/.direct-chat -->
-                  </div>
+                    </td>
+                  </tr>
+                </tbody></table>
+              </div>
+              <!-- /.card-body -->
+              <div @mouseover="changeCategoryId(category.id)" class="card-footer">
+                <div class="card-tools pull-right">
+                  <pagination :data="category.forums" @pagination-change-page="getResults"></pagination>
+                </div>
+              </div>
+            </div>
+            <!-- /.card -->
+          </div>
+        </div>
 
+    <!-- Modal -->
+            <div class="modal fade" id="addNew" tabindex="-1" role="dialog" aria-labelledby="addNewLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" v-show="!editmode" id="addNewLabel">Add New Category</h5>
+                    <h5 class="modal-title" v-show="editmode" id="addNewLabel">Update Categories Info</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form @submit.prevent="editmode ? updateCategory() : createCategory()">
+                <div class="modal-body">
+                     <div class="form-group">
+                        <input v-model="form.title" type="text" name="title"
+                            placeholder="Title"
+                            class="form-control" :class="{ 'is-invalid': form.errors.has('title') }">
+                        <has-error :form="form" field="title"></has-error>
+                    </div>
 
+                     <div class="form-group">
+                        <input v-model="form.description" type="text" name="decription"
+                            placeholder="Description"
+                            class="form-control" :class="{ 'is-invalid': form.errors.has('description') }">
+                        <has-error :form="form" field="description"></has-error>
+                    </div>
+
+                     <div class="form-group">
+                        <input v-model="form.sort" type="number" name="sort"
+                        placeholder="Sort Number"
+                        class="form-control" :class="{ 'is-invalid': form.errors.has('sort') }"></input>
+                        <has-error :form="form" field="sort"></has-error>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button v-show="editmode" type="submit" class="btn btn-success">Update</button>
+                    <button v-show="!editmode" type="submit" class="btn btn-primary">Create</button>
+                </div>
+
+                </form>
+
+                </div>
+            </div>
+            </div>
     </div>
+
+
+
 </template>
 
 <script>
     export default {
         data() {
             return {
+                editmode: false,
+                categories : {},
+                category_id: '1',
+                form: new Form({
+                    id:'',
+                    title : '',
+                    description: '',
+                    sort: '',
+                    created_at: '',
+                    updated_at: ''
+                })
             }
         },
+        mounted() {
+          //do something after mounting vue instance
+
+        },
         methods: {
-          getThreads()
-          {
-            axios.get('api/forum/category/' + categoryId + '?page=' + page)
-                .then(response => {
-                  this.categories.forEach(function(entry) {
-                    if (entry.id == categoryId) {
-                      entry.forums = response.data;
-                    }
-                  });
-                    //this.categories[category_id].forums = response;
-                  });
-          }
+            changeCategoryId(id) {
+              this.category_id = id;
+            },
+            getResults(page = 1) {
+              var categoryId = this.category_id;
+                  axios.get(this.$site_url_address + 'api/forum/category/' + categoryId + '?page=' + page)
+                      .then(response => {
+                        this.categories.forEach(function(entry) {
+                          if (entry.id == categoryId) {
+                            entry.forums = response.data;
+                          }
+                        });
+                          //this.categories[category_id].forums = response;
+                        });
+                },
+            updateCategory(){
+                this.$Progress.start();
+                // console.log('Editing data');
+                this.form.put(this.$site_url_address + 'api/category/'+this.form.id)
+                .then(() => {
+                    // success
+                    $('#addNew').modal('hide');
+                     swal(
+                        'Updated!',
+                        'Category has been updated.',
+                        'success'
+                        )
+                        this.$Progress.finish();
+                         Fire.$emit('AfterCreate');
+                })
+                .catch(() => {
+                    this.$Progress.fail();
+                });
+
+            },
+            editModal(categories){
+                this.editmode = true;
+                this.form.reset();
+                $('#addNew').modal('show');
+                this.form.fill(categories);
+            },
+            newModal(){
+                this.editmode = false;
+                this.form.reset();
+                $('#addNew').modal('show');
+            },
+            deleteCategory(id){
+                swal({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+
+                        // Send request to the server
+                         if (result.value) {
+                                this.form.delete(this.$site_url_address + 'api/category/'+id).then(()=>{
+                                        swal(
+                                        'Deleted!',
+                                        'The category has been deleted.',
+                                        'success'
+                                        )
+                                    Fire.$emit('AfterCreate');
+                                }).catch(()=> {
+                                    swal("Failed!", "There was something wronge.", "warning");
+                                });
+                         }
+                    })
+            },
+            loadCategories(){
+                    axios.get(this.$site_url_address + "api/category").then(({ data }) => (this.categories = data));
+                    console.log(this.categories);
+            },
+
+            createCategory(){
+                this.$Progress.start();
+
+                this.form.post(this.$site_url_address + 'api/category')
+                .then(()=>{
+                  // success
+                  $('#addNew').modal('hide');
+                   swal(
+                      'Created!',
+                      'Category has been created.',
+                      'success'
+                      )
+                      this.$Progress.finish();
+                       Fire.$emit('AfterCreate');
+                })
+                .catch(()=>{
+                    this.$Progress.fail();
+                })
+            }
+        },
+        created() {
+            Fire.$on('searching',() => {
+                let query = this.$parent.search;
+                axios.get(this.$site_url_address + 'api/findCategory?q=' + query)
+                .then((data) => {
+                    this.categories = data.data
+                })
+                .catch(() => {
+                    this.$Progress.fail();
+                })
+            });
+           this.loadCategories();
+           Fire.$on('AfterCreate',() => {
+               this.loadCategories();
+           });
+        //    setInterval(() => this.loadUsers(), 3000);
         }
+
     }
 </script>
