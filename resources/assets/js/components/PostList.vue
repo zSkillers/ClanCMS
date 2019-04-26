@@ -11,6 +11,8 @@
           :date='post.created_at'
           ></postbit>
         </template>
+        <editor v-model="model"></editor>
+        <button class="btn btn-success page-item btn-sm" @click="loadLastPost">Add Post<i class="fas fa-user-plus fa-fw"></i></button>
       </div><!-- /.card-body -->
       <div class="card-footer" style="overflow-x: scroll;">
           <pagination :data="posts" @pagination-change-page="loadPosts"></pagination>
@@ -21,21 +23,27 @@
 
 <script>
 import postbit from './Forum/PostBit.vue'
+import editor from './Editor.vue'
 
 export default {
   data() {
     return {
-      posts: {}
+      posts: {},
+      model: ''
     }
   },
   components: {
-    postbit
+    postbit,
+    editor
   },
   methods: {
     loadPosts(page = 1) {
       axios
         .get(this.$site_url_address + 'api/posts/' + this.$route.params.thread_id + '?page=' + page)
         .then(response => (this.posts = response.data));
+    },
+    loadLastPost() {
+        this.posts.current_page = this.posts.last_page;
     }
   },
   mounted() {

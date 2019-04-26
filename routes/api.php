@@ -30,6 +30,7 @@ Route::middleware('auth:api')->get('/thread', function (Request $request) {
 
 Route::get('forum/category/{category_id}', 'API\ForumController@findByCategoryId');
 Route::get('threads/{forum_id}', 'API\ThreadController@findThreadsByForumId');
+Route::get('posts/{thread_id}', 'API\PostController@findPostsByThreadId');
 
 Route::get('user/count', 'API\UserController@countTotal');
 Route::get('user/{userid}', 'API\UserController@getUserById');
