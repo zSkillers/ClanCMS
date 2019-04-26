@@ -14,6 +14,7 @@ Vue.prototype.$site_url_address = 'http://127.0.0.1:8000/';
 import Gate from "./Gate";
 Vue.prototype.$gate = new Gate(window.user);
 import swal from 'sweetalert2'
+
 window.swal = swal;
 
 const toast = swal.mixin({
@@ -48,6 +49,7 @@ let routes = [
     { path: '/profile', component: require('./components/Profile.vue') },
     { path: '/category', component: require('./components/Categories.vue') },
     { path: '/forum/:forum_name/:forum_id', component: require('./components/ThreadList.vue') },
+    { path: '/thread/:thread_name/:thread_id', component: require('./components/PostList.vue') },
     { path: '*', component: require('./components/NotFound.vue') }
   ]
 
