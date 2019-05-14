@@ -1,11 +1,26 @@
 <template>
-    <div class="container">
+    <div>
+
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                Forum
+                <small>Manage, add, and remove user accounts.</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Forum</a></li>
+                <li class="active">Categories</li>
+            </ol>
+        </section>
+
+        <section class="content">
+
         <div class="row mt-5">
           <div class="col-md-12" v-for="category in categories" :key="category.id">
                             <h3 class="card-title">{{category.title}} Table [{{category.forums.total}}]</h3>
-            <div class="card">
+            <div class="box">
               <!-- /.card-header -->
-              <div class="card-body table-responsive p-0">
+              <div class="box-body table-responsive p-0">
                 <table class="table table-hover center">
                   <tbody>
                     <tr>
@@ -13,7 +28,7 @@
                         <th>Title</th>
                         <th  v-if="$gate.isAdminOrAuthor()">Registered At</th>
                         <th  v-if="$gate.isAdminOrAuthor()">Modify</th>
-                        <th  v-if="$gate.isAdminOrAuthor()"><button class="btn btn-success page-item btn-sm" @click="newModal">Add New <i class="fas fa-user-plus fa-fw"></i></button></th>
+                        <th  v-if="$gate.isAdminOrAuthor()"><button class="btn btn-success page-item btn-sm" @click="newModal">Add New <i class="fa fa-plus-square fa-fw"></i></button></th>
                   </tr>
                     <tr v-for="forum in category.forums.data" :key="forum.id">
                     <td  v-if="$gate.isAdminOrAuthor()">{{forum.id}}</td>
@@ -91,6 +106,7 @@
                 </div>
             </div>
             </div>
+        </section>
     </div>
 
 

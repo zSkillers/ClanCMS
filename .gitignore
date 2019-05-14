@@ -22,3 +22,5 @@ public/.htaccess
 package-lock.json
 public/css/app.css
 public/js/app.js
+public/images/vendor/*
+public/bower_components/*

@@ -28,8 +28,13 @@ Route::middleware('auth:api')->get('/thread', function (Request $request) {
     return $request->thread();
 });
 
+Route::middleware('auth:api')->get('/post', function (Request $request) {
+    return $request->post();
+});
+
 Route::get('forum/category/{category_id}', 'API\ForumController@findByCategoryId');
 Route::get('threads/{forum_id}', 'API\ThreadController@findThreadsByForumId');
+Route::get('posts/{thread_id}', 'API\PostController@findPostsByThreadId');
 
 Route::get('user/count', 'API\UserController@countTotal');
 Route::get('user/{userid}', 'API\UserController@getUserById');
@@ -44,5 +49,6 @@ Route::apiResources(['user' => 'API\UserController']);
 Route::apiResources(['category' => 'API\CategoryController']);
 Route::apiResources(['forum' => 'API\ForumController']);
 Route::apiResources(['thread' => 'API\ThreadController']);
+Route::apiResources(['post' => 'API\PostController']);
 
 Route::get('dashboard', 'API\DashboardController@index');
