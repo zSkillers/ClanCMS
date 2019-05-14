@@ -6,7 +6,7 @@
     </div><!-- /.direct-chat-info -->
     <img class="direct-chat-img" :src='avatar' alt="message user image">
     <!-- /.direct-chat-img -->
-    <div class="direct-chat-text">
+    <div class="direct-chat-text" v-html="message">
         {{message}}
     </div><!-- /.direct-chat-text -->
   </div><!-- /.direct-chat-msg -->

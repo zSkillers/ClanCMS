@@ -5,7 +5,7 @@
 
     export default {
         props: {
-            value: {
+            textValue: {
                 type: String,
                 default: ''
             }
@@ -21,14 +21,15 @@
                 modules: {
                     toolbar: [
                         [{ header: [1, 2, 3, 4, false] }],
-                        ['bold', 'italic', 'underline']
+                        ['bold', 'italic', 'underline'],
+                        [{ align: ['', 'justify', 'center', 'right']}]
                     ]
                 },
                 theme: 'snow',
-                formats: ['bold', 'underline', 'header', 'italic']
+                formats: ['bold', 'underline', 'header', 'italic', 'align']
             });
 
-            this.editor.root.innerHTML = this.value;
+            this.editor.root.innerHTML = this.textValue;
 
             this.editor.on('text-change', () => this.update());
         },
