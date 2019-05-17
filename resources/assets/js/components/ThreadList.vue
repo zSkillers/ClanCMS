@@ -39,31 +39,60 @@
       </div> <!-- /.card-body -->
       <div class="box-footer">
           <pagination :data="threads" @pagination-change-page="loadThreads"></pagination>
-      </div> <!-- /.card-footer -->
-        <editor v-model="model">{{ model }}</editor>
-    </div> <!-- /.card -->
+                    <div>
+          <label>Thread Title</label>
+          <input style="margin-bottom:5px;" type="text" class="form-control" placeholder="Enter title here..." v-model="thread_title"/>
+          <editor v-model="thread_body">{{ thread_body }}</editor>
+          <button style="margin-top:5px;" class="btn btn-success page-item btn-sm pull-right" @click="createThread">Create Thread<i class="fa  fa-plus-square fa-fw"></i></button>
+      </div>
+      </div> <!-- /.card-footer -->    </div> <!-- /.card -->
 </section>
   </div> <!-- /.div-->
 </template>
 
 <script>
 import postbit from './Forum/ThreadBits.vue'
+import editor from './Editor.vue'
 
 export default {
     data() {
         return {
             threads: {},
+            thread_title: '',
+            thread_body: ''
         }
     },
     components: {
-        postbit
+        postbit,
+        editor,
     },
     methods: {
         loadThreads(page = 1) {
             axios
                 .get(this.$site_url_address + 'api/threads/' + this.$route.params.forum_id + '?page=' + page)
                 .then(response => (this.threads = response.data));
-        }
+        },
+         createThread() {
+            axios({
+                method: 'post',
+                url: this.$site_url_address + 'api/thread',
+                data: {
+                    forum_id: this.$route.params.forum_id,
+                    thread_title: this.thread_title,
+                    thread_body: this.thread_body
+                }
+            })
+                .then(response => (
+                    toast({
+                        type: 'success',
+                        title: 'Thread Created Successful'
+                    })
+        ))
+                .catch(function(response) {
+                    console.log(response);
+                    swal("Failed!", "Something went wrong!", "warning");
+                });
+      },
     },
     mounted() {
         this.loadThreads();
