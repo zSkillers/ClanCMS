@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Post as Post;
+use App\Thread as Thread;
 use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
@@ -33,7 +34,6 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-
         $this->validate($request,[
             'post' => 'required|string|max:191'
         ]);
@@ -44,7 +44,9 @@ class PostController extends Controller
             'body' => $request['post']
         ]);
 
+        $thread = Thread::find($request['thread_id']);
+        $thread->touch();
+
         return ['message' => "Success"];
     }
-
 }
