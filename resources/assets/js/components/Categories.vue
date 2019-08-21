@@ -17,8 +17,14 @@
 
         <div class="row mt-5">
           <div class="col-md-12" v-for="category in categories" :key="category.id">
-                            <h3 class="card-title">{{category.title}} Table [{{category.forums.total}}]</h3>
-            <div class="box">
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h3 class="box-title">{{category.title}} Table [{{category.forums.total}}]</h3>
+
+                    <div class="box-tools" @mouseover="changeCategoryId(category.id)">
+                        <pagination class="pagination pagination-sm no-margin pull-right" :data="category.forums" @pagination-change-page="getResults"></pagination>
+                    </div>
+                </div>
               <!-- /.card-header -->
               <div class="box-body table-responsive p-0">
                 <table class="table table-hover center">
@@ -26,17 +32,13 @@
                     <tr>
                         <th  v-if="$gate.isAdminOrAuthor()">ID</th>
                         <th>Title</th>
-                        <th  v-if="$gate.isAdminOrAuthor()">Registered At</th>
-                        <th  v-if="$gate.isAdminOrAuthor()">Modify</th>
-                        <th  v-if="$gate.isAdminOrAuthor()"><button class="btn btn-success page-item btn-sm" @click="newModal">Add New <i class="fa fa-plus-square fa-fw"></i></button></th>
+                        <th class="text-right" v-if="$gate.isAdminOrAuthor()">Action</th>
                   </tr>
                     <tr v-for="forum in category.forums.data" :key="forum.id">
                     <td  v-if="$gate.isAdminOrAuthor()">{{forum.id}}</td>
                     <td><router-link :to="'forum/' + forum.title + '/' + forum.id">{{forum.title}}</router-link></td>
-                    <td  v-if="$gate.isAdminOrAuthor()">{{forum.created_at | myDate}}</td>
-                    <td  v-if="$gate.isAdminOrAuthor()">{{forum.updated_at | myDate}}</td>
 
-                    <td v-if="$gate.isAdminOrAuthor()">
+                    <td class="text-right" v-if="$gate.isAdminOrAuthor()">
                         <a href="#" @click="editModal(forum)">
                             <i class="fa fa-edit blue"></i>
                         </a>
@@ -50,11 +52,6 @@
                 </tbody></table>
               </div>
               <!-- /.card-body -->
-              <div @mouseover="changeCategoryId(category.id)" class="card-footer">
-                <div class="card-tools pull-right">
-                  <pagination :data="category.forums" @pagination-change-page="getResults"></pagination>
-                </div>
-              </div>
             </div>
             <!-- /.card -->
           </div>
