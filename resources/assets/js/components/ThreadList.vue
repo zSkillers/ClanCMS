@@ -30,7 +30,7 @@
               :title="thread.title"
               :titleid="thread.id"
               :username="thread.user.name"
-              :url="'thread/' + thread.title + '/' + thread.titleid"
+              :url="'thread/' + thread.titleid"
               :replycount="thread.id"
               ></postbit>
             </template><!-- /.template -->

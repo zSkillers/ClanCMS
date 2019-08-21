@@ -16,6 +16,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::middleware('auth:api')->get('/stat', function (Request $request) {
+    return $request->stat();
+});
+
+Route::middleware('auth:api')->get('/stathistory', function (Request $request) {
+    return $request->stathistory();
+});
+
 Route::middleware('auth:api')->get('/category', function (Request $request) {
     return $request->category();
 });
@@ -50,5 +58,7 @@ Route::apiResources(['category' => 'API\CategoryController']);
 Route::apiResources(['forum' => 'API\ForumController']);
 Route::apiResources(['thread' => 'API\ThreadController']);
 Route::apiResources(['post' => 'API\PostController']);
+Route::apiResources(['stat' => 'API\StatController']);
+Route::apiResources(['stathistory' => 'API\StathistoryController']);
 
 Route::get('dashboard', 'API\DashboardController@index');

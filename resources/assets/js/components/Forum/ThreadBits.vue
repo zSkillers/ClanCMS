@@ -1,6 +1,6 @@
 <template>
     <tr>
-      <td><router-link :to="'../../thread/' + title + '/' + titleid + ''">{{title}}</router-link></td>
+      <td><router-link :to="'../../thread/' + titleid + ''">{{title}}</router-link></td>
       <td>{{ username }}</td>
       <td>{{ replycount }}</td>
       <td>Last Reply Here</td>

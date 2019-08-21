@@ -47,7 +47,7 @@ let routes = [
     { path: '/profile', component: require('./components/Profile.vue') },
     { path: '/category', component: require('./components/Categories.vue') },
     { path: '/forum/:forum_name/:forum_id', component: require('./components/ThreadList.vue') },
-    { path: '/thread/:thread_name/:thread_id', component: require('./components/PostList.vue') },
+    { path: '/thread/:thread_id', component: require('./components/PostList.vue') },
     { path: '*', component: require('./components/NotFound.vue') }
   ]
 
