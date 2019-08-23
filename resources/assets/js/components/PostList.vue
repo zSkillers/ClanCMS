@@ -26,7 +26,7 @@
         <div style="overflow-x: scroll;">
             <pagination :data="posts" @pagination-change-page="loadPosts"></pagination>
         </div> <!-- /.card-footer -->
-        <editor v-model="model">{{ model }}</editor>
+        <editor v-model="model"></editor>
         <button style="margin-top:5px;" class="btn btn-success page-item btn-sm pull-right" @click="createPost">Add Post<i class="fa  fa-plus-square fa-fw"></i></button>
       </div><!-- /.card-body -->
     </div> <!-- /.container -->
@@ -77,6 +77,8 @@ export default {
                   console.log(response);
                   swal("Failed!", "Something went wrong!", "warning");
               });
+              this.loadPosts();
+              this.model = '';
     },
   },
   mounted() {
