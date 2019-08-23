@@ -285,6 +285,8 @@
     </div>
     <strong>Copyright &copy; 2019 <a href="http://wwwzskillers.com">Cody Wofford</a>.</strong> All rights
     reserved.
+    <a href="https://www.termsfeed.com/terms-service/3ec04fca9aea8a156edab76d57c365ec">
+        Terms of Service</a>
   </footer>
 
   <!-- Control Sidebar -->
