@@ -49,6 +49,7 @@ Route::get('user/{userid}', 'API\UserController@getUserById');
 Route::get('profile', 'API\UserController@profile');
 Route::get('findUser', 'API\UserController@search');
 Route::put('profile', 'API\UserController@updateProfile');
+Route::get('stat', 'API\StatController@index');
 
 Route::get('category/count', 'API\CategoryController@countTotal');
 Route::get('findCategory', 'API\CategoryController@search');

@@ -28,6 +28,12 @@ window.Form = Form;
 Vue.component(HasError.name, HasError)
 Vue.component(AlertError.name, AlertError)
 
+Vue.filter('formatDate', function(value) {
+    if (value) {
+        return moment(String(value)).format('MMMM Do, YYYY hh:mm')
+    }
+})
+
 Vue.component('pagination', require('laravel-vue-pagination'));
 
 import VueRouter from 'vue-router'
@@ -46,6 +52,7 @@ let routes = [
     { path: '/users', component: require('./components/Users.vue') },
     { path: '/profile', component: require('./components/Profile.vue') },
     { path: '/category', component: require('./components/Categories.vue') },
+    { path: '/stat', component: require('./components/Highscores.vue') },
     { path: '/forum/:forum_name/:forum_id', component: require('./components/ThreadList.vue') },
     { path: '/thread/:thread_id', component: require('./components/PostList.vue') },
     { path: '*', component: require('./components/NotFound.vue') }
