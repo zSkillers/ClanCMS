@@ -18,6 +18,8 @@ class CreateThreadsTable extends Migration
             $table->string('title');
             $table->integer('user_id');
             $table->integer('forum_id');
+            $table->boolean('locked')->default(0);
+            $table->boolean('pinned')->default(0);
             $table->timestamps();
         });
     }

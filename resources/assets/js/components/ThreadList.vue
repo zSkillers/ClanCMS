@@ -29,6 +29,7 @@
               <postbit
               :title="thread.title"
               :titleid="thread.id"
+              :pinned="thread.pinned"
               :username="thread.user.name"
               :url="'thread/' + thread.titleid"
               :replycount="thread.id"
@@ -42,7 +43,7 @@
                     <div>
           <label>Thread Title</label>
           <input style="margin-bottom:5px;" type="text" class="form-control" placeholder="Enter title here..." v-model="thread_title"/>
-          <editor v-model="thread_body">{{ thread_body }}</editor>
+          <editor v-model="thread_body"></editor>
           <button style="margin-top:5px;" class="btn btn-success page-item btn-sm pull-right" @click="createThread">Create Thread<i class="fa  fa-plus-square fa-fw"></i></button>
       </div>
       </div> <!-- /.card-footer -->    </div> <!-- /.card -->
@@ -92,6 +93,8 @@ export default {
                     console.log(response);
                     swal("Failed!", "Something went wrong!", "warning");
                 });
+        this.thread_body = "";
+        this.loadThreads();
       },
     },
     mounted() {

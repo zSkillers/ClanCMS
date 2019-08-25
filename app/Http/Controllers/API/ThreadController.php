@@ -22,7 +22,7 @@ class ThreadController extends Controller
 
   public function findThreadsByForumId(Request $request)
   {
-    $threads = Thread::where('forum_id', $request['forum_id'])->with('user', 'forum', 'forum.category')->orderBy('updated_at', 'desc');
+    $threads = Thread::where('forum_id', $request['forum_id'])->with('user', 'forum', 'forum.category')->orderBy('pinned', 'desc')->orderBy('updated_at', 'desc');
     return $threads->paginate(10);
   }
 
