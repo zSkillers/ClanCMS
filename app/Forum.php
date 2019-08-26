@@ -12,7 +12,7 @@ class Forum extends Model
    * @var array
    */
   protected $fillable = [
-      'title', 'category_id'
+      'title', 'category_id', 'description', 'sort'
   ];
     public function category()
     {
