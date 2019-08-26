@@ -4,12 +4,11 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
-                Forum
-                <small>Manage, add, and remove user accounts.</small>
+                Forums
+                <small>Disscussion amongst the community.</small>
             </h1>
             <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Forum</a></li>
-                <li class="active">Categories</li>
+                <li><button v-if="$gate.isAdmin()" @click="toggleAdminCP" class="btn btn-primary btn-sm">{{adminToggleButton}}</button></li>
             </ol>
         </section>
 
@@ -19,8 +18,17 @@
           <div class="col-md-12" v-for="category in categories" :key="category.id">
             <div class="box box-primary">
                 <div class="box-header">
-                    <h3 class="box-title">{{category.title}} Table [{{category.forums.total}}]</h3>
+                    <h3 class="box-title">{{category.title}} </h3>
 
+                    <template v-if="$gate.isAdmin() && toggle == 1">
+                        <a href="#" @click="editModal(category)">
+                            <i class="fa fa-edit blue"></i>
+                        </a>
+                        /
+                        <a href="#" @click="deleteCategory(category.id)">
+                            <i class="fa fa-trash red"></i>
+                        </a>
+                    </template>
                     <div class="box-tools" @mouseover="changeCategoryId(category.id)">
                         <pagination class="pagination pagination-sm no-margin pull-right" :data="category.forums" @pagination-change-page="getResults"></pagination>
                     </div>
@@ -30,20 +38,19 @@
                 <table class="table table-hover center">
                   <tbody>
                     <tr>
-                        <th  v-if="$gate.isAdminOrAuthor()">ID</th>
                         <th>Title</th>
-                        <th class="text-right" v-if="$gate.isAdminOrAuthor()">Action</th>
+                        <th class="text-right" v-if="$gate.isAdmin() && toggle == 1">Action</th>
                   </tr>
                     <tr v-for="forum in category.forums.data" :key="forum.id">
-                    <td  v-if="$gate.isAdminOrAuthor()">{{forum.id}}</td>
-                    <td><router-link :to="'forum/' + forum.title + '/' + forum.id">{{forum.title}}</router-link></td>
+                    <td><router-link :to="'forum/' + forum.title + '/' + forum.id">{{forum.title}}</router-link>
+                    {{forum.description}}</td>
 
-                    <td class="text-right" v-if="$gate.isAdminOrAuthor()">
-                        <a href="#" @click="editModal(forum)">
+                    <td class="text-right" v-if="$gate.isAdminOrAuthor() && toggle == 1">
+                        <a href="#" @click="editModalForum(forum)">
                             <i class="fa fa-edit blue"></i>
                         </a>
                         /
-                        <a href="#" @click="deleteCategory(category.id)">
+                        <a href="#" @click="deleteForum(forum.id)">
                             <i class="fa fa-trash red"></i>
                         </a>
 
@@ -103,6 +110,60 @@
                 </div>
             </div>
             </div>
+
+            <!-- Modal -->
+                    <div class="modal fade in" id="addNewForum" tabindex="-1" role="dialog" aria-labelledby="addNewLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" v-show="!editmode" id="addNewLabel">Add New Forum</h5>
+                            <h5 class="modal-title" v-show="editmode" id="addNewLabel">Update Forum Info</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form @submit.prevent="editmode ? updateForum() : createForum()">
+                        <div class="modal-body">
+                             <div class="form-group">
+                                <input v-model="formForum.title" type="text" name="title"
+                                    placeholder="Title"
+                                    class="form-control" :class="{ 'is-invalid': formForum.errors.has('title') }">
+                                <has-error :form="formForum" field="title"></has-error>
+                            </div>
+
+                             <div class="form-group">
+                                <input v-model="formForum.description" type="text" name="decription"
+                                    placeholder="Description"
+                                    class="form-control">
+                                <has-error :form="formForum" field="description"></has-error>
+                            </div>
+
+                            <div class="form-group">
+                               <input v-model="formForum.category_id" type="number" name="category_id"
+                                   placeholder="Category Id"
+                                   class="form-control" :class="{ 'is-invalid': formForum.errors.has('category_id') }">
+                               <has-error :form="formForum" field="category_id"></has-error>
+                           </div>
+
+                             <div class="form-group">
+                                <input v-model="formForum.sort" type="number" name="sort"
+                                placeholder="Sort Number"
+                                class="form-control" :class="{ 'is-invalid': formForum.errors.has('sort') }"></input>
+                                <has-error :form="formForum" field="sort"></has-error>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            <button v-show="editmode" type="submit" class="btn btn-success">Update</button>
+                            <button v-show="!editmode" type="submit" class="btn btn-primary">Create</button>
+                        </div>
+
+                        </form>
+
+                        </div>
+                    </div>
+                    </div>
         </section>
     </div>
 
@@ -117,10 +178,21 @@
                 editmode: false,
                 categories : {},
                 category_id: '1',
+                toggle: '0',
+                adminToggleButton: 'Enable Admin CP',
                 form: new Form({
                     id:'',
                     title : '',
                     description: '',
+                    sort: '',
+                    created_at: '',
+                    updated_at: ''
+                }),
+                formForum: new Form({
+                    id:'',
+                    title : '',
+                    description: '',
+                    category_id: '',
                     sort: '',
                     created_at: '',
                     updated_at: ''
@@ -134,6 +206,15 @@
         methods: {
             changeCategoryId(id) {
               this.category_id = id;
+            },
+            toggleAdminCP() {
+                if (this.toggle == 0) {
+                    this.toggle = 1;
+                    this.adminToggleButton = 'Disable Admin CP';
+                } else {
+                    this.toggle = 0;
+                    this.adminToggleButton = 'Enable Admin CP';
+                }
             },
             getResults(page = 1) {
               var categoryId = this.category_id;
@@ -167,6 +248,26 @@
                 });
 
             },
+            updateForum(){
+                this.$Progress.start();
+                // console.log('Editing data');
+                this.formForum.put(this.$site_url_address + 'api/forum/'+this.formForum.id)
+                .then(() => {
+                    // success
+                    $('#addNewForum').modal('hide');
+                     swal(
+                        'Updated!',
+                        'Forum has been updated.',
+                        'success'
+                        )
+                        this.$Progress.finish();
+                         Fire.$emit('AfterCreate');
+                })
+                .catch(() => {
+                    this.$Progress.fail();
+                });
+
+            },
             editModal(categories){
                 this.editmode = true;
                 this.form.reset();
@@ -177,6 +278,17 @@
                 this.editmode = false;
                 this.form.reset();
                 $('#addNew').modal('show');
+            },
+            editModalForum(forum){
+                this.editmode = true;
+                this.formForum.reset();
+                $('#addNewForum').modal('show');
+                this.formForum.fill(forum);
+            },
+            newModalForum(){
+                this.editmode = false;
+                this.formForum.reset();
+                $('#addNewForum').modal('show');
             },
             deleteCategory(id){
                 swal({
@@ -199,7 +311,33 @@
                                         )
                                     Fire.$emit('AfterCreate');
                                 }).catch(()=> {
-                                    swal("Failed!", "There was something wronge.", "warning");
+                                    swal("Failed!", "There was something wrong.", "warning");
+                                });
+                         }
+                    })
+            },
+            deleteForum(id){
+                swal({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+
+                        // Send request to the server
+                         if (result.value) {
+                                this.formForum.delete(this.$site_url_address + 'api/forum/'+id).then(()=>{
+                                        swal(
+                                        'Deleted!',
+                                        'The forum has been deleted.',
+                                        'success'
+                                        )
+                                    Fire.$emit('AfterCreate');
+                                }).catch(()=> {
+                                    swal("Failed!", "There was something wrong.", "warning");
                                 });
                          }
                     })
@@ -227,7 +365,26 @@
                 .catch(()=>{
                     this.$Progress.fail();
                 })
-            }
+        },
+        createForum(){
+            this.$Progress.start();
+
+            this.formForum.post(this.$site_url_address + 'api/forum')
+            .then(()=>{
+              // success
+              $('#addNewForum').modal('hide');
+               swal(
+                  'Created!',
+                  'Forum has been created.',
+                  'success'
+                  )
+                  this.$Progress.finish();
+                   Fire.$emit('AfterCreate');
+            })
+            .catch(()=>{
+                this.$Progress.fail();
+            })
+        }
         },
         created() {
             Fire.$on('searching',() => {
@@ -245,7 +402,6 @@
                this.loadCategories();
            });
         //    setInterval(() => this.loadUsers(), 3000);
-        }
-
     }
+}
 </script>
