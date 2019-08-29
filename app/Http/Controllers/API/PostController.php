@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Post as Post;
 use App\Thread as Thread;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
@@ -46,6 +47,9 @@ class PostController extends Controller
 
         $thread = Thread::find($request['thread_id']);
         $thread->touch();
+
+        //$thread->increment('post_count')
+        DB::table('forums')->where('id', $thread->forum_id)->increment('post_count');
 
         return ['message' => "Success"];
     }
