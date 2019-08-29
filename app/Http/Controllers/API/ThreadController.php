@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Thread as Thread;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ThreadController extends Controller
 {
@@ -51,6 +52,8 @@ class ThreadController extends Controller
           'body' => $request['thread_body']
       ]);
 
+      DB::table('forums')->where('id', $request['forum_id'])->increment('thread_count');
+      DB::table('forums')->where('id', $request['forum_id'])->increment('post_count');
       return ['message' => "Success"];
   }
 

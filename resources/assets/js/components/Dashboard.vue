@@ -18,8 +18,8 @@
             <div class="row">
                 <div class="col-lg-4 col-6">
                     <SmallBoxMoreInfo
-                        v-bind:header='widgetInfo.userCount'
-                        body='Users' url='/users'
+                        v-bind:header='widgetInfo.user_count'
+                        body='Users Count' url='/users'
                         icon='ion ion-ios-people'
                         color='bg-green'>
                     </SmallBoxMoreInfo>
@@ -27,8 +27,8 @@
                 <!-- ./col -->
                 <div class="col-lg-4 col-6">
                     <SmallBoxMoreInfo
-                        v-bind:header='widgetInfo.categoryCount'
-                        body='Category' url='/category'
+                        v-bind:header='widgetInfo.category_count'
+                        body='Category Count' url='/category'
                         icon='ion ion-locked'
                         color='bg-aqua'>
                     </SmallBoxMoreInfo>
@@ -36,8 +36,8 @@
                 <!-- ./col -->
                 <div class="col-lg-4 col-6">
                     <SmallBoxMoreInfo
-                        v-bind:header='widgetInfo.forumCount'
-                        body='Forum' url='/category'
+                        v-bind:header='widgetInfo.forum_count'
+                        body='Forum Count' url='/category'
                         icon='ion ion-pie-graph'
                         color='bg-yellow'>
                     </SmallBoxMoreInfo>
@@ -45,19 +45,11 @@
 
                 </div>
                 <div class="row">
-                    <div class="col-lg-4 col-6">
-                        <SmallBoxMoreInfo
-                            v-bind:header='widgetInfo.categoryCount'
-                            body='Threads' url='/users'
-                            icon='ion ion-ios-people'
-                            color='bg-red'>
-                        </SmallBoxMoreInfo>
-                    </div>
                     <!-- ./col -->
                     <div class="col-lg-4 col-6">
                         <SmallBoxMoreInfo
-                            v-bind:header='widgetInfo.forumCount'
-                            body='Posts' url='/category'
+                            v-bind:header='widgetInfo.thread_count'
+                            body='Thread Count' url='/category'
                             icon='ion ion-chatbubble-working'
                             color='bg-purple'>
                         </SmallBoxMoreInfo>
@@ -65,8 +57,8 @@
                     <!-- ./col -->
                     <div class="col-lg-4 col-6">
                         <SmallBoxMoreInfo
-                            v-bind:header='widgetInfo.userCount'
-                            body='Staff Online' url='/category'
+                            v-bind:header='widgetInfo.post_count'
+                            body='Post Count' url='/category'
                             icon='ion ion-arrow-graph-up-right'
                             color='bg-teal'>
                         </SmallBoxMoreInfo>

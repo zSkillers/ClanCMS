@@ -174,7 +174,14 @@
                   <a href="#" class="btn btn-default btn-flat">Profile</a>
                 </div>
                 <div class="pull-right">
-                  <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                  <a class="btn btn-default btn-flat" href="{{ route('logout') }}"
+                  onclick="event.preventDefault();
+                                document.getElementById('logout-form').submit();">
+                      <i class="nav-icon fa fa-power-off red"></i>
+                      <span>
+                          {{ __('Logout') }}
+                      </span>
+                   </a>
                 </div>
               </li>
             </ul>
@@ -239,7 +246,16 @@
 
         <li>
             <router-link to="/category" class="nav-link">
-                <i class="fa fa-th"></i> <span>Category</span>
+                <i class="fa fa-th"></i> <span>Forums</span>
+                <span class="pull-right-container">
+                  <small class="label pull-right bg-green">new</small>
+                </span>
+            </router-link>
+        </li>
+
+        <li>
+            <router-link to="/stat" class="nav-link">
+                <i class="fa fa-th"></i> <span>High-score</span>
                 <span class="pull-right-container">
                   <small class="label pull-right bg-green">new</small>
                 </span>
@@ -260,11 +276,6 @@
              @csrf
          </form>
         </li>
-
-        <li class="header">LABELS</li>
-        <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>
-        <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Warning</span></a></li>
-        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Information</span></a></li>
       </ul>
     </section>
     <!-- /.sidebar -->

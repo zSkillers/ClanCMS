@@ -8,6 +8,7 @@ use App\Categories as CategoryModel;
 use Illuminate\Support\Facades\DB;
 use App\Category as Category;
 use App\Forum as Forum;
+use App\Thread as Thread;
 
 
 class CategoryController extends Controller
@@ -30,10 +31,18 @@ class CategoryController extends Controller
      */
     public function index()
     {
-      $categories = Category::all();
-      foreach ($categories as $key => $category) {
-        $category['forums'] = Forum::where('category_id', $category['id'])->paginate(5);
-      }
+      $categories = Category::orderBy('sort')->with(['forums' => function ($query) {
+          $query->orderBy('sort');
+      }])->get();
+      // foreach ($categories as $key => $category) {
+      //     $fields = DB::table('forums')
+      //         ->select('*')
+      //         ->where('category_id', $category['id'])
+      //         ->get();
+      //     //$fields['thread_count'] = Thread::where('forum_id', $fields['id'])->count();
+      //
+      //     $category['forums'][] = $fields;
+      // }
 
       return $categories;
     }
@@ -110,7 +119,6 @@ class CategoryController extends Controller
       $this->authorize('isAdmin');
 
       $category = Category::findOrFail($id);
-
       $category->delete();
 
       return ['message' => 'Category Deleted'];

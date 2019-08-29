@@ -22,6 +22,8 @@ class CreateUsersTable extends Migration
             $table->mediumText('bio')->nullable();
             $table->string('photo')->default('profile.png');
             $table->rememberToken();
+            $table->integer('thread_count')->default(0);
+            $table->integer('post_count')->default(0);
             $table->timestamps();
         });
     }

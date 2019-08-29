@@ -18,8 +18,13 @@ class CreateForumsTable extends Migration
             $table->string('title');
             $table->string('description')->nullable();
             $table->integer('sort')->default(1);
-            $table->integer('category_id');
+            $table->integer('category_id')->unsigned();
+            $table->integer('thread_count')->default(0);
+            $table->integer('post_count')->default(0);
             $table->timestamps();
+            $table->foreign('category_id')
+            ->references('id')->on('categories')
+            ->onDelete('cascade');
         });
     }
 
