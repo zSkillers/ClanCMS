@@ -7,8 +7,9 @@
                 Forums
                 <small>Disscussion amongst the community.</small>
             </h1>
-            <ol class="breadcrumb">
-                <li><button v-if="$gate.isAdmin()" @click="toggleAdminCP" class="btn btn-primary btn-sm">{{adminToggleButton}}</button></li>
+            <ol v-if="$gate.isAdmin()" class="breadcrumb">
+                <li><button v-if="$gate.isAdmin() && toggle == 1" @click="createModalForum()" class="btn btn-primary btn-xs">Add Category</button></li>
+                <li><button v-if="$gate.isAdmin()" @click="toggleAdminCP" class="btn btn-primary btn-xs">{{adminToggleButton}}</button></li>
             </ol>
         </section>
 
@@ -19,18 +20,20 @@
             <div class="box box-primary">
                 <div class="box-header">
                     <h3 class="box-title">{{category.title}} </h3>
-
-                    <template v-if="$gate.isAdmin() && toggle == 1">
-                        <a href="#" @click="editModal(category)">
-                            <i class="fa fa-edit blue"></i>
-                        </a>
-                        /
-                        <a href="#" @click="deleteCategory(category.id)">
-                            <i class="fa fa-trash red"></i>
-                        </a>
-                    </template>
                     <div class="box-tools" @mouseover="changeCategoryId(category.id)">
-                        <pagination class="pagination pagination-sm no-margin pull-right" :data="category.forums" @pagination-change-page="getResults"></pagination>
+                        <template v-if="$gate.isAdmin() && toggle == 1">
+                            <a href="#" @click="createForumModel(category)">
+                                <i class="fa fa-plus blue"></i>
+                            </a>
+                            /
+                            <a href="#" @click="editCategoryModel(category)">
+                                <i class="fa fa-edit blue"></i>
+                            </a>
+                            /
+                            <a href="#" @click="deleteCategory(category.id)">
+                                <i class="fa fa-trash red"></i>
+                            </a>
+                        </template>
                     </div>
                 </div>
               <!-- /.card-header -->
@@ -39,11 +42,14 @@
                   <tbody>
                     <tr>
                         <th>Title</th>
+                        <th>Threads</th>
+                        <th>Posts</th>
                         <th class="text-right" v-if="$gate.isAdmin() && toggle == 1">Action</th>
                   </tr>
-                    <tr v-for="forum in category.forums.data" :key="forum.id">
-                    <td><router-link :to="'forum/' + forum.title + '/' + forum.id">{{forum.title}}</router-link>
-                    {{forum.description}}</td>
+                    <tr v-for="forum in category.forums" :key="forum.id">
+                    <td><router-link :to="'forum/' + forum.title + '/' + forum.id">{{forum.title}}</router-link><br /><small>{{forum.description}}</small></td>
+                    <td><router-link :to="'forum/' + forum.title + '/' + forum.id">{{forum.thread_count}}</router-link></td>
+                    <td><router-link :to="'forum/' + forum.title + '/' + forum.id">{{forum.post_count}}</router-link></td>
 
                     <td class="text-right" v-if="$gate.isAdminOrAuthor() && toggle == 1">
                         <a href="#" @click="editModalForum(forum)">
@@ -62,10 +68,10 @@
             </div>
             <!-- /.card -->
           </div>
-        </div>
+      </div>
 
     <!-- Modal -->
-            <div class="modal fade in" id="addNew" tabindex="-1" role="dialog" aria-labelledby="addNewLabel" aria-hidden="true">
+            <div class="modal fade in" id="categoryModel" tabindex="-1" role="dialog" aria-labelledby="addNewLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
@@ -112,7 +118,7 @@
             </div>
 
             <!-- Modal -->
-                    <div class="modal fade in" id="addNewForum" tabindex="-1" role="dialog" aria-labelledby="addNewLabel" aria-hidden="true">
+                    <div class="modal fade in" id="forumModel" tabindex="-1" role="dialog" aria-labelledby="addNewLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                         <div class="modal-header">
@@ -196,6 +202,11 @@
                     sort: '',
                     created_at: '',
                     updated_at: ''
+                }),
+                formNewForum: new Form({
+                    title : '',
+                    description : '',
+                    sort : ''
                 })
             }
         },
@@ -234,7 +245,7 @@
                 this.form.put(this.$site_url_address + 'api/category/'+this.form.id)
                 .then(() => {
                     // success
-                    $('#addNew').modal('hide');
+                    $('#categoryModel').modal('hide');
                      swal(
                         'Updated!',
                         'Category has been updated.',
@@ -254,7 +265,7 @@
                 this.formForum.put(this.$site_url_address + 'api/forum/'+this.formForum.id)
                 .then(() => {
                     // success
-                    $('#addNewForum').modal('hide');
+                    $('#forumModel').modal('hide');
                      swal(
                         'Updated!',
                         'Forum has been updated.',
@@ -268,27 +279,28 @@
                 });
 
             },
-            editModal(categories){
+            editCategoryModel(categories){
                 this.editmode = true;
                 this.form.reset();
-                $('#addNew').modal('show');
+                $('#categoryModel').modal('show');
                 this.form.fill(categories);
             },
-            newModal(){
+            createForumModel(categories){
                 this.editmode = false;
-                this.form.reset();
-                $('#addNew').modal('show');
+                this.formForum.reset();
+                this.formForum.category_id = categories.id;
+                $('#forumModel').modal('show');
             },
             editModalForum(forum){
                 this.editmode = true;
                 this.formForum.reset();
-                $('#addNewForum').modal('show');
+                $('#forumModel').modal('show');
                 this.formForum.fill(forum);
             },
-            newModalForum(){
+            createModalForum(){
                 this.editmode = false;
-                this.formForum.reset();
-                $('#addNewForum').modal('show');
+                this.form.reset();
+                $('#categoryModel').modal('show');
             },
             deleteCategory(id){
                 swal({
@@ -353,7 +365,7 @@
                 this.form.post(this.$site_url_address + 'api/category')
                 .then(()=>{
                   // success
-                  $('#addNew').modal('hide');
+                  $('#categoryModel').modal('hide');
                    swal(
                       'Created!',
                       'Category has been created.',
@@ -372,7 +384,7 @@
             this.formForum.post(this.$site_url_address + 'api/forum')
             .then(()=>{
               // success
-              $('#addNewForum').modal('hide');
+              $('#forumModel').modal('hide');
                swal(
                   'Created!',
                   'Forum has been created.',
