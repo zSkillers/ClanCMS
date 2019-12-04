@@ -12,7 +12,7 @@ class Thread extends Model
    * @var array
    */
   protected $fillable = [
-      'id', 'title', 'user_id', 'forum_id'
+      'id', 'title', 'user_id', 'forum_id', 'post_count', 'pinned', 'locked'
   ];
 
   public function forum()
@@ -20,7 +20,7 @@ class Thread extends Model
     return $this->belongsTo('App\Forum');
   }
 
-  public function threads()
+  public function posts()
   {
     return $this->hasMany('App\Post');
   }

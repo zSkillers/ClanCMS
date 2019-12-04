@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'bio', 'photo','type'
+        'name', 'email', 'bio', 'photo','type', 'rsname', 'title'
     ];
 
     /**
@@ -25,7 +25,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+     'remember_token',
     ];
 
     public function threads()
@@ -46,5 +46,10 @@ class User extends Authenticatable
     public function stat()
     {
       return $this->hasOne('App\Stat');
+    }
+
+    public function shouts()
+    {
+      return $this->hasOne('App\shoutbox');
     }
 }
