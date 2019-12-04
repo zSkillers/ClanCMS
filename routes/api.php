@@ -16,6 +16,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::middleware('auth:api')->get('/shoutbox', function (Request $request) {
+    return $request->shoutbox();
+});
+
 Route::middleware('auth:api')->get('/stat', function (Request $request) {
     return $request->stat();
 });
@@ -43,6 +47,8 @@ Route::middleware('auth:api')->get('/post', function (Request $request) {
 Route::get('forum/category/{category_id}', 'API\ForumController@findByCategoryId');
 Route::get('threads/{forum_id}', 'API\ThreadController@findThreadsByForumId');
 Route::get('posts/{thread_id}', 'API\PostController@findPostsByThreadId');
+Route::post('thread/pinned', 'API\ThreadController@pinnedOrUnpinnedThread');
+Route::post('thread/locked', 'API\ThreadController@lockOrUnpockThread');
 
 Route::get('user/count', 'API\UserController@countTotal');
 Route::get('user/{userid}', 'API\UserController@getUserById');
@@ -61,5 +67,6 @@ Route::apiResources(['thread' => 'API\ThreadController']);
 Route::apiResources(['post' => 'API\PostController']);
 Route::apiResources(['stat' => 'API\StatController']);
 Route::apiResources(['stathistory' => 'API\StathistoryController']);
+Route::apiResources(['shoutbox' => 'API\ShoutboxController']);
 
 Route::get('dashboard', 'API\DashboardController@index');

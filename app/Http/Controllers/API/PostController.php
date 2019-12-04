@@ -24,7 +24,7 @@ class PostController extends Controller
     public function findPostsByThreadId(Request $request)
     {
     $posts = Post::where('thread_id', $request['thread_id'])->with('user', 'thread');
-    return $posts->paginate(18);
+    return $posts->paginate(10);
     }
 
     /**
@@ -50,6 +50,8 @@ class PostController extends Controller
 
         //$thread->increment('post_count')
         DB::table('forums')->where('id', $thread->forum_id)->increment('post_count');
+        DB::table('threads')->where('id', $request['thread_id'])->increment('post_count');
+        DB::table('users')->where('id', Auth::user()->id)->increment('post_count');
 
         return ['message' => "Success"];
     }

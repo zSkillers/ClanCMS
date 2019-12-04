@@ -3,12 +3,11 @@
 
       <!-- Content Header (Page header) -->
       <section class="content-header">
-          <h1 v-model="title">
+          <h1>
               {{title}}
           </h1>
-          <ol class="breadcrumb">
-              <li><a href="#"><i class="fa fa-dashboard"></i> Forum</a></li>
-              <li class="active">Categories</li>
+          <ol v-if="$gate.isAdmin()" class="breadcrumb">
+              <li><button v-if="$gate.isAdmin()" @click="toggleAdminCP" class="btn btn-primary btn-xs">{{adminToggleButton}}</button></li>
           </ol>
       </section>
 
@@ -26,8 +25,10 @@
         <div style="overflow-x: scroll;">
             <pagination :data="posts" @pagination-change-page="loadPosts"></pagination>
         </div> <!-- /.card-footer -->
-        <editor v-model="model"></editor>
-        <button style="margin-top:5px;" class="btn btn-success page-item btn-sm pull-right" @click="createPost">Add Post<i class="fa  fa-plus-square fa-fw"></i></button>
+        <template v-if="locked == 0">
+            <editor v-model="model"></editor>
+            <button style="margin-top:5px;" class="btn btn-success page-item btn-sm pull-right" @click="createPost">Add Post<i class="fa  fa-plus-square fa-fw"></i></button>
+        </template>
       </div><!-- /.card-body -->
     </div> <!-- /.container -->
 </section>
@@ -43,20 +44,41 @@ export default {
     return {
       posts: {},
       model: '',
-      title: ''
+      title: '',
+      locked: '1',
+      adminToggleButton: 'Enable Admin CP',
+      toggle: 0,
     }
   },
+
   components: {
     postbit,
     editor
   },
+
   methods: {
+    /**
+    * [toggleAdminCP Toggle Admin CP]
+    * @return {[void]}
+    */
+    toggleAdminCP() {
+      if (this.toggle == 0) {
+          this.toggle = 1;
+          this.adminToggleButton = 'Disable Admin CP';
+      } else {
+          this.toggle = 0;
+          this.adminToggleButton = 'Enable Admin CP';
+      }
+    },
+
     loadPosts(page = 1) {
       axios
         .get(this.$site_url_address + 'api/posts/' + this.$route.params.thread_id + '?page=' + page)
         .then(response => (this.posts = response.data,
-        this.title = response.data.data[0].thread.title));
+        this.title = response.data.data[0].thread.title,
+        this.locked = response.data.data[0].thread.locked));
     },
+
       createPost() {
           axios({
               method: 'post',
@@ -80,7 +102,9 @@ export default {
               this.loadPosts();
               this.model = '';
     },
+
   },
+
   mounted() {
     this.loadPosts();
   }
