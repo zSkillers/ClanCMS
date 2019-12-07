@@ -72,114 +72,114 @@
                             </tr>
 
                             <tr v-for="stat in updatehighscore(stats)" :key="stat.id">
-                                <td>{{stat.id}}</td>
+                                <td>{{rankPos++}}</td>
                                 <td>{{stat.rsname}}</td>
                                 <!-- Overall -->
-                                <td v-if="skill == 'overall' && type== 'xp'">{{stat.overall_xp}}</td>
-                                <td v-if="skill == 'overall' && type== 'level'">{{stat.overall_level}}</td>
-                                <td v-if="skill == 'overall' && type== 'rank'">{{stat.overall_rank}}</td>
+                                <td v-if="skill == 'overall' && type== 'xp'">{{stat.overall_xp.toLocaleString()}}</td>
+                                <td v-if="skill == 'overall' && type== 'level'">{{stat.overall_level.toLocaleString()}}</td>
+                                <td v-if="skill == 'overall' && type== 'rank'">{{stat.overall_rank.toLocaleString()}}</td>
                                 <!-- Attack -->
-                                <td v-if="skill == 'attack' && type== 'xp'">{{stat.attack_xp}}</td>
-                                <td v-if="skill == 'attack' && type== 'level'">{{stat.attack_level}}</td>
-                                <td v-if="skill == 'attack' && type== 'rank'">{{stat.attack_rank}}</td>
+                                <td v-if="skill == 'attack' && type== 'xp'">{{stat.attack_xp.toLocaleString()}}</td>
+                                <td v-if="skill == 'attack' && type== 'level'">{{stat.attack_level.toLocaleString()}}</td>
+                                <td v-if="skill == 'attack' && type== 'rank'">{{stat.attack_rank.toLocaleString()}}</td>
                                 <!-- Defence -->
-                                <td v-if="skill == 'defence' && type== 'xp'">{{stat.defence_xp}}</td>
-                                <td v-if="skill == 'defence' && type== 'level'">{{stat.defence_level}}</td>
-                                <td v-if="skill == 'defence' && type== 'rank'">{{stat.defence_rank}}</td>
+                                <td v-if="skill == 'defence' && type== 'xp'">{{stat.defence_xp.toLocaleString()}}</td>
+                                <td v-if="skill == 'defence' && type== 'level'">{{stat.defence_level.toLocaleString()}}</td>
+                                <td v-if="skill == 'defence' && type== 'rank'">{{stat.defence_rank.toLocaleString()}}</td>
                                 <!-- Strength -->
-                                <td v-if="skill == 'strength' && type== 'xp'">{{stat.strength_xp}}</td>
-                                <td v-if="skill == 'strength' && type== 'level'">{{stat.strength_level}}</td>
-                                <td v-if="skill == 'strength' && type== 'rank'">{{stat.strength_rank}}</td>
+                                <td v-if="skill == 'strength' && type== 'xp'">{{stat.strength_xp.toLocaleString()}}</td>
+                                <td v-if="skill == 'strength' && type== 'level'">{{stat.strength_level.toLocaleString()}}</td>
+                                <td v-if="skill == 'strength' && type== 'rank'">{{stat.strength_rank.toLocaleString()}}</td>
                                 <!-- Hitpoints -->
-                                <td v-if="skill == 'hitpoints' && type== 'xp'">{{stat.hitpoints_xp}}</td>
-                                <td v-if="skill == 'hitpoints' && type== 'level'">{{stat.hitpoints_level}}</td>
-                                <td v-if="skill == 'hitpoints' && type== 'rank'">{{stat.hitpoints_rank}}</td>
+                                <td v-if="skill == 'hitpoints' && type== 'xp'">{{stat.hitpoints_xp.toLocaleString()}}</td>
+                                <td v-if="skill == 'hitpoints' && type== 'level'">{{stat.hitpoints_level.toLocaleString()}}</td>
+                                <td v-if="skill == 'hitpoints' && type== 'rank'">{{stat.hitpoints_rank.toLocaleString()}}</td>
                                 <!-- Ranged -->
-                                <td v-if="skill == 'ranged' && type== 'xp'">{{stat.ranged_xp}}</td>
-                                <td v-if="skill == 'ranged' && type== 'level'">{{stat.ranged_level}}</td>
-                                <td v-if="skill == 'ranged' && type== 'rank'">{{stat.ranged_rank}}</td>
+                                <td v-if="skill == 'ranged' && type== 'xp'">{{stat.ranged_xp.toLocaleString()}}</td>
+                                <td v-if="skill == 'ranged' && type== 'level'">{{stat.ranged_level.toLocaleString()}}</td>
+                                <td v-if="skill == 'ranged' && type== 'rank'">{{stat.ranged_rank.toLocaleString()}}</td>
                                 <!-- Prayer -->
-                                <td v-if="skill == 'prayer' && type== 'xp'">{{stat.prayer_xp}}</td>
-                                <td v-if="skill == 'prayer' && type== 'level'">{{stat.prayer_level}}</td>
-                                <td v-if="skill == 'prayer' && type== 'rank'">{{stat.prayer_rank}}</td>
+                                <td v-if="skill == 'prayer' && type== 'xp'">{{stat.prayer_xp.toLocaleString()}}</td>
+                                <td v-if="skill == 'prayer' && type== 'level'">{{stat.prayer_level.toLocaleString()}}</td>
+                                <td v-if="skill == 'prayer' && type== 'rank'">{{stat.prayer_rank.toLocaleString()}}</td>
                                 <!-- Magic -->
-                                <td v-if="skill == 'magic' && type== 'xp'">{{stat.magic_xp}}</td>
-                                <td v-if="skill == 'magic' && type== 'level'">{{stat.magic_level}}</td>
-                                <td v-if="skill == 'magic' && type== 'rank'">{{stat.magic_rank}}</td>
+                                <td v-if="skill == 'magic' && type== 'xp'">{{stat.magic_xp.toLocaleString()}}</td>
+                                <td v-if="skill == 'magic' && type== 'level'">{{stat.magic_level.toLocaleString()}}</td>
+                                <td v-if="skill == 'magic' && type== 'rank'">{{stat.magic_rank.toLocaleString()}}</td>
                                 <!-- Woodcutting -->
-                                <td v-if="skill == 'woodcutting' && type== 'xp'">{{stat.woodcutting_xp}}</td>
-                                <td v-if="skill == 'woodcutting' && type== 'level'">{{stat.woodcutting_level}}</td>
-                                <td v-if="skill == 'woodcutting' && type== 'rank'">{{stat.woodcutting_rank}}</td>
+                                <td v-if="skill == 'woodcutting' && type== 'xp'">{{stat.woodcutting_xp.toLocaleString()}}</td>
+                                <td v-if="skill == 'woodcutting' && type== 'level'">{{stat.woodcutting_level.toLocaleString()}}</td>
+                                <td v-if="skill == 'woodcutting' && type== 'rank'">{{stat.woodcutting_rank.toLocaleString()}}</td>
                                 <!-- Fletching -->
-                                <td v-if="skill == 'fletching' && type== 'xp'">{{stat.fletching_xp}}</td>
-                                <td v-if="skill == 'fletching' && type== 'level'">{{stat.fletching_level}}</td>
-                                <td v-if="skill == 'fletching' && type== 'rank'">{{stat.fletching_rank}}</td>
+                                <td v-if="skill == 'fletching' && type== 'xp'">{{stat.fletching_xp.toLocaleString()}}</td>
+                                <td v-if="skill == 'fletching' && type== 'level'">{{stat.fletching_level.toLocaleString()}}</td>
+                                <td v-if="skill == 'fletching' && type== 'rank'">{{stat.fletching_rank.toLocaleString()}}</td>
                                 <!-- Fishing -->
-                                <td v-if="skill == 'fishing' && type== 'xp'">{{stat.fishing_xp}}</td>
-                                <td v-if="skill == 'fishing' && type== 'level'">{{stat.fishing_level}}</td>
-                                <td v-if="skill == 'fishing' && type== 'rank'">{{stat.fishing_rank}}</td>
+                                <td v-if="skill == 'fishing' && type== 'xp'">{{stat.fishing_xp.toLocaleString()}}</td>
+                                <td v-if="skill == 'fishing' && type== 'level'">{{stat.fishing_level.toLocaleString()}}</td>
+                                <td v-if="skill == 'fishing' && type== 'rank'">{{stat.fishing_rank.toLocaleString()}}</td>
                                 <!-- Firemaking -->
-                                <td v-if="skill == 'firemaking' && type== 'xp'">{{stat.firemaking_xp}}</td>
-                                <td v-if="skill == 'firemaking' && type== 'level'">{{stat.firemaking_level}}</td>
-                                <td v-if="skill == 'firemaking' && type== 'rank'">{{stat.firemaking_rank}}</td>
+                                <td v-if="skill == 'firemaking' && type== 'xp'">{{stat.firemaking_xp.toLocaleString()}}</td>
+                                <td v-if="skill == 'firemaking' && type== 'level'">{{stat.firemaking_level.toLocaleString()}}</td>
+                                <td v-if="skill == 'firemaking' && type== 'rank'">{{stat.firemaking_rank.toLocaleString()}}</td>
                                 <!-- Crafting -->
-                                <td v-if="skill == 'crafting' && type== 'xp'">{{stat.crafting_xp}}</td>
-                                <td v-if="skill == 'crafting' && type== 'level'">{{stat.crafting_level}}</td>
-                                <td v-if="skill == 'crafting' && type== 'rank'">{{stat.crafting_rank}}</td>
+                                <td v-if="skill == 'crafting' && type== 'xp'">{{stat.crafting_xp.toLocaleString()}}</td>
+                                <td v-if="skill == 'crafting' && type== 'level'">{{stat.crafting_level.toLocaleString()}}</td>
+                                <td v-if="skill == 'crafting' && type== 'rank'">{{stat.crafting_rank.toLocaleString()}}</td>
                                 <!-- Smithing -->
-                                <td v-if="skill == 'smithing' && type== 'xp'">{{stat.smithing_xp}}</td>
-                                <td v-if="skill == 'smithing' && type== 'level'">{{stat.smithing_level}}</td>
-                                <td v-if="skill == 'smithing' && type== 'rank'">{{stat.smithing_rank}}</td>
+                                <td v-if="skill == 'smithing' && type== 'xp'">{{stat.smithing_xp.toLocaleString()}}</td>
+                                <td v-if="skill == 'smithing' && type== 'level'">{{stat.smithing_level.toLocaleString()}}</td>
+                                <td v-if="skill == 'smithing' && type== 'rank'">{{stat.smithing_rank.toLocaleString()}}</td>
                                 <!-- Mining -->
-                                <td v-if="skill == 'mining' && type== 'xp'">{{stat.mining_xp}}</td>
-                                <td v-if="skill == 'mining' && type== 'level'">{{stat.mining_level}}</td>
-                                <td v-if="skill == 'mining' && type== 'rank'">{{stat.mining_rank}}</td>
+                                <td v-if="skill == 'mining' && type== 'xp'">{{stat.mining_xp.toLocaleString()}}</td>
+                                <td v-if="skill == 'mining' && type== 'level'">{{stat.mining_level.toLocaleString()}}</td>
+                                <td v-if="skill == 'mining' && type== 'rank'">{{stat.mining_rank.toLocaleString()}}</td>
                                 <!-- Herblore -->
-                                <td v-if="skill == 'herblore' && type== 'xp'">{{stat.herblore_xp}}</td>
-                                <td v-if="skill == 'herblore' && type== 'level'">{{stat.herblore_level}}</td>
-                                <td v-if="skill == 'herblore' && type== 'rank'">{{stat.herblore_rank}}</td>
+                                <td v-if="skill == 'herblore' && type== 'xp'">{{stat.herblore_xp.toLocaleString()}}</td>
+                                <td v-if="skill == 'herblore' && type== 'level'">{{stat.herblore_level.toLocaleString()}}</td>
+                                <td v-if="skill == 'herblore' && type== 'rank'">{{stat.herblore_rank.toLocaleString()}}</td>
                                 <!-- Agility -->
-                                <td v-if="skill == 'agility' && type== 'xp'">{{stat.agility_xp}}</td>
-                                <td v-if="skill == 'agility' && type== 'level'">{{stat.agility_level}}</td>
-                                <td v-if="skill == 'agility' && type== 'rank'">{{stat.agility_rank}}</td>
+                                <td v-if="skill == 'agility' && type== 'xp'">{{stat.agility_xp.toLocaleString()}}</td>
+                                <td v-if="skill == 'agility' && type== 'level'">{{stat.agility_level.toLocaleString()}}</td>
+                                <td v-if="skill == 'agility' && type== 'rank'">{{stat.agility_rank.toLocaleString()}}</td>
                                 <!-- Thieving -->
-                                <td v-if="skill == 'thieving' && type== 'xp'">{{stat.thieving_xp}}</td>
-                                <td v-if="skill == 'thieving' && type== 'level'">{{stat.thieving_level}}</td>
-                                <td v-if="skill == 'thieving' && type== 'rank'">{{stat.thieving_rank}}</td>
+                                <td v-if="skill == 'thieving' && type== 'xp'">{{stat.thieving_xp.toLocaleString()}}</td>
+                                <td v-if="skill == 'thieving' && type== 'level'">{{stat.thieving_level.toLocaleString()}}</td>
+                                <td v-if="skill == 'thieving' && type== 'rank'">{{stat.thieving_rank.toLocaleString()}}</td>
                                 <!-- Slayer -->
-                                <td v-if="skill == 'slayer' && type== 'xp'">{{stat.slayer_xp}}</td>
-                                <td v-if="skill == 'slayer' && type== 'level'">{{stat.slayer_level}}</td>
-                                <td v-if="skill == 'slayer' && type== 'rank'">{{stat.slayer_rank}}</td>
+                                <td v-if="skill == 'slayer' && type== 'xp'">{{stat.slayer_xp.toLocaleString()}}</td>
+                                <td v-if="skill == 'slayer' && type== 'level'">{{stat.slayer_level.toLocaleString()}}</td>
+                                <td v-if="skill == 'slayer' && type== 'rank'">{{stat.slayer_rank.toLocaleString()}}</td>
                                 <!-- Farming -->
-                                <td v-if="skill == 'farming' && type== 'xp'">{{stat.farming_xp}}</td>
-                                <td v-if="skill == 'farming' && type== 'level'">{{stat.farming_level}}</td>
-                                <td v-if="skill == 'farming' && type== 'rank'">{{stat.farming_rank}}</td>
+                                <td v-if="skill == 'farming' && type== 'xp'">{{stat.farming_xp.toLocaleString()}}</td>
+                                <td v-if="skill == 'farming' && type== 'level'">{{stat.farming_level.toLocaleString()}}</td>
+                                <td v-if="skill == 'farming' && type== 'rank'">{{stat.farming_rank.toLocaleString()}}</td>
                                 <!-- Runecrafting -->
-                                <td v-if="skill == 'runecrafting' && type== 'xp'">{{stat.runecrafting_xp}}</td>
-                                <td v-if="skill == 'runecrafting' && type== 'level'">{{stat.runecrafting_level}}</td>
-                                <td v-if="skill == 'runecrafting' && type== 'rank'">{{stat.overarunecrafting_rank}}</td>
+                                <td v-if="skill == 'runecrafting' && type== 'xp'">{{stat.runecrafting_xp.toLocaleString()}}</td>
+                                <td v-if="skill == 'runecrafting' && type== 'level'">{{stat.runecrafting_level.toLocaleString()}}</td>
+                                <td v-if="skill == 'runecrafting' && type== 'rank'">{{stat.overarunecrafting_rank.toLocaleString()}}</td>
                                 <!-- Hunter -->
-                                <td v-if="skill == 'hunter' && type== 'xp'">{{stat.hunter_xp}}</td>
-                                <td v-if="skill == 'hunter' && type== 'level'">{{stat.hunter_level}}</td>
-                                <td v-if="skill == 'hunter' && type== 'rank'">{{stat.hunter_rank}}</td>
+                                <td v-if="skill == 'hunter' && type== 'xp'">{{stat.hunter_xp.toLocaleString()}}</td>
+                                <td v-if="skill == 'hunter' && type== 'level'">{{stat.hunter_level.toLocaleString()}}</td>
+                                <td v-if="skill == 'hunter' && type== 'rank'">{{stat.hunter_rank.toLocaleString()}}</td>
                                 <!-- Construction -->
-                                <td v-if="skill == 'construction' && type== 'xp'">{{stat.construction_xp}}</td>
-                                <td v-if="skill == 'construction' && type== 'level'">{{stat.construction_level}}</td>
-                                <td v-if="skill == 'construction' && type== 'rank'">{{stat.construction_rank}}</td>
+                                <td v-if="skill == 'construction' && type== 'xp'">{{stat.construction_xp.toLocaleString()}}</td>
+                                <td v-if="skill == 'construction' && type== 'level'">{{stat.construction_level.toLocaleString()}}</td>
+                                <td v-if="skill == 'construction' && type== 'rank'">{{stat.construction_rank.toLocaleString()}}</td>
                                 <!-- Clue Scroll All -->
-                                <td v-if="skill == 'clue_scroll_all_score'">{{stat.clue_scroll_all}}</td>
+                                <td v-if="skill == 'clue_scroll_all_score'">{{stat.clue_scroll_all.toLocaleString()}}</td>
                                 <!-- Clue Scroll Beginner -->
-                                <td v-if="skill == 'clue_scroll_beginner_score'">{{stat.clue_scroll_beginner}}</td>
+                                <td v-if="skill == 'clue_scroll_beginner_score'">{{stat.clue_scroll_beginner.toLocaleString()}}</td>
                                 <!-- Clue Scroll Easy -->
-                                <td v-if="skill == 'clue_scroll_easy_score'">{{stat.clue_scroll_easy}}</td>
+                                <td v-if="skill == 'clue_scroll_easy_score'">{{stat.clue_scroll_easy.toLocaleString()}}</td>
                                 <!-- Clue Scroll Medium -->
-                                <td v-if="skill == 'clue_scroll_medium_score'">{{stat.clue_scroll_medium}}</td>
+                                <td v-if="skill == 'clue_scroll_medium_score'">{{stat.clue_scroll_medium.toLocaleString()}}</td>
                                 <!-- Clue Scroll Hard -->
-                                <td v-if="skill == 'clue_scroll_hard_score'">{{stat.clue_scroll_hard}}</td>
+                                <td v-if="skill == 'clue_scroll_hard_score'">{{stat.clue_scroll_hard.toLocaleString()}}</td>
                                 <!-- Clue Scroll Elite -->
-                                <td v-if="skill == 'clue_scroll_elite_score'">{{stat.clue_scroll_elite}}</td>
+                                <td v-if="skill == 'clue_scroll_elite_score'">{{stat.clue_scroll_elite.toLocaleString()}}</td>
                                 <!-- Clue Scroll Master -->
-                                <td v-if="skill == 'clue_scroll_master_score'">{{stat.clue_scroll_master}}</td>
+                                <td v-if="skill == 'clue_scroll_master_score'">{{stat.clue_scroll_master.toLocaleString()}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -196,6 +196,7 @@
                 stats: {},
                 skill: "overall",
                 type: "xp",
+                rankPos: 1,
             }
         },
         mounted() {
@@ -213,6 +214,7 @@
                 })
             },
             updatehighscore(arr) {
+                this.rankPos = 1;
                 // Overall
                 if (this.skill == 'overall' && this.type == "xp") {
                     return arr.slice().sort(function(a, b) {
