@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
-
     /**
      * Create a new controller instance.
      *
@@ -23,8 +22,11 @@ class PostController extends Controller
 
     public function findPostsByThreadId(Request $request)
     {
-    $posts = Post::where('thread_id', $request['thread_id'])->with('user', 'thread');
-    return $posts->paginate(10);
+        $posts = Post::where('thread_id', $request['thread_id'])->with(
+            'user',
+            'thread'
+        );
+        return $posts->paginate(10);
     }
 
     /**
@@ -35,12 +37,12 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             'post' => 'required|string|max:191'
         ]);
 
         $createPost = Post::create([
-            'user_id' => Auth::user()->id,
+            'user_id' => Auth::id(),
             'thread_id' => $request['thread_id'],
             'body' => $request['post']
         ]);
@@ -48,10 +50,20 @@ class PostController extends Controller
         $thread = Thread::find($request['thread_id']);
         $thread->touch();
 
+
         //$thread->increment('post_count')
-        DB::table('forums')->where('id', $thread->forum_id)->increment('post_count');
-        DB::table('threads')->where('id', $request['thread_id'])->increment('post_count');
-        DB::table('users')->where('id', Auth::user()->id)->increment('post_count');
+        DB::table('forums')
+            ->where('id', $thread->forum_id)
+            ->increment('post_count');
+        DB::table('threads')
+            ->where('id', $request['thread_id'])
+            ->increment('post_count');
+        DB::table('users')
+            ->where('id', Auth::id())
+            ->increment('post_count');
+
+        $thread->last_user_reply_id = Auth::id();
+        $thread->save();
 
         return ['message' => "Success"];
     }

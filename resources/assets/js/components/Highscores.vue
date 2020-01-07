@@ -207,7 +207,7 @@
                 axios.get(this.$site_url_address + "api/stat").then(({ data }) => (this.stats = data));
                 console.log(this.stats);
                 },
-                even: function(arr) {
+            even: function(arr) {
                   // Set slice() to avoid to generate an infinite loop!
                   return arr.slice().sort(function(a, b) {
                     return b[4]- a[4];

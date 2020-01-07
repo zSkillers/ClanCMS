@@ -14,12 +14,10 @@ class Category extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'title', 'description', 'sort'
-    ];
+    protected $fillable = ['title', 'description', 'sort'];
 
     public function forums()
     {
-      return $this->hasMany('App\Forum');
+        return $this->hasMany('App\Forum');
     }
 }

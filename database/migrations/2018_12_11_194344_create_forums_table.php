@@ -22,9 +22,11 @@ class CreateForumsTable extends Migration
             $table->integer('thread_count')->default(0);
             $table->integer('post_count')->default(0);
             $table->timestamps();
-            $table->foreign('category_id')
-            ->references('id')->on('categories')
-            ->onDelete('cascade');
+            $table
+                ->foreign('category_id')
+                ->references('id')
+                ->on('categories')
+                ->onDelete('cascade');
         });
     }
 

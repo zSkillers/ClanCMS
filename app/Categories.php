@@ -9,8 +9,5 @@ class Categories
      *
      * @var array
      */
-    protected $fillable = [
-        'title', 'description', 'sort'
-    ];
-
+    protected $fillable = ['title', 'description', 'sort'];
 }

@@ -11,18 +11,16 @@ use Illuminate\Support\Facades\DB;
 
 class StatController extends Controller
 {
+    public function __construct()
+    {
+        //$this->middleware('auth:api');
+    }
 
-  public function __construct()
-  {
-    //$this->middleware('auth:api');
-  }
-
-  public function index()
-  {
-      return DB::table('stats')
-          ->join('users', 'stats.user_id', '=', 'users.id')
-          ->select('stats.*', 'users.rsname')
-          ->get();
-  }
-
+    public function index()
+    {
+        return DB::table('stats')
+            ->join('users', 'stats.user_id', '=', 'users.id')
+            ->select('stats.*', 'users.rsname')
+            ->get();
+    }
 }

@@ -262,6 +262,15 @@
             </router-link>
         </li>
 
+          <li>
+              <router-link to="/message" class="nav-link">
+                  <i class="fa fa-th"></i> <span>Messages</span>
+                  <span class="pull-right-container">
+                  <small class="label pull-right bg-green">new</small>
+                </span>
+              </router-link>
+          </li>
+
         <li>
             <a class="nav-link" href="{{ route('logout') }}"
             onclick="event.preventDefault();
