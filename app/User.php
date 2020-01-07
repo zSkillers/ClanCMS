@@ -16,7 +16,14 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'bio', 'photo','type', 'rsname', 'title'
+        'name',
+        'email',
+        'bio',
+        'photo',
+        'type',
+        'rsname',
+        'title',
+        'password'
     ];
 
     /**
@@ -24,32 +31,45 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $hidden = [
-     'remember_token',
-    ];
+    protected $hidden = ['remember_token', 'password'];
 
     public function threads()
     {
-      return $this->hasMany('App\Thread');
+        return $this->hasMany('App\Thread');
     }
 
     public function posts()
     {
-      return $this->hasMany('App\Post');
+        return $this->hasMany('App\Post');
     }
 
     public function stathistorys()
     {
-      return $this->hasMany('App\Stathistory');
+        return $this->hasMany('App\Stathistory');
     }
 
     public function stat()
     {
-      return $this->hasOne('App\Stat');
+        return $this->hasOne('App\Stat');
     }
 
     public function shouts()
     {
-      return $this->hasOne('App\shoutbox');
+        return $this->hasOne('App\shoutbox');
+    }
+
+    public function last_user_replys()
+    {
+        return $this->hasMany("App\Thread");
+    }
+
+    public function private_messages()
+    {
+        return $this->hasMany("App\PrivateMessage");
+    }
+
+    public function private_threads()
+    {
+        return $this->hasMany("App\PrivateThread");
     }
 }

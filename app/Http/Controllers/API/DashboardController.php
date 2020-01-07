@@ -13,14 +13,15 @@ use App\Thread as Thread;
 
 class DashboardController extends Controller
 {
-    public function index() {
-      $dashboardData = array(
-        'user_count' => User::count(),
-        'category_count' => Category::count(),
-        'forum_count' => Forum::count(),
-        'thread_count' => Thread::count(),
-        'post_count' => Post::count()
-      );
-      return json_encode($dashboardData);
+    public function index()
+    {
+        $dashboardData = array(
+            'user_count' => User::count(),
+            'category_count' => Category::count(),
+            'forum_count' => Forum::count(),
+            'thread_count' => Thread::count(),
+            'post_count' => Post::count()
+        );
+        return json_encode($dashboardData);
     }
 }

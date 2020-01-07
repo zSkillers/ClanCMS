@@ -11,20 +11,18 @@ use Illuminate\Support\Facades\DB;
 
 class StathistoryController extends Controller
 {
+    public function __construct()
+    {
+        //$this->middleware('auth:api');
+    }
 
-  public function __construct()
-  {
-    //$this->middleware('auth:api');
-  }
-
-  public function index()
-  {
-    return DB::table('users')
-        ->join('stats', 'users.id', '=', 'stats.user_id')
-        ->select('stats.user_id')
-        ->distinct()
-        ->select('stats.*')
-        ->get();
-  }
-
+    public function index()
+    {
+        return DB::table('users')
+            ->join('stats', 'users.id', '=', 'stats.user_id')
+            ->select('stats.user_id')
+            ->distinct()
+            ->select('stats.*')
+            ->get();
+    }
 }

@@ -2,18 +2,15 @@
 
 namespace App\Http\Controllers\API;
 
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Categories as CategoryModel;
-use Illuminate\Support\Facades\DB;
 use App\Category as Category;
-use App\Forum as Forum;
-use App\Thread as Thread;
-
+use Illuminate\Http\Response;
+use Illuminate\Validation\ValidationException;
 
 class CategoryController extends Controller
 {
-
     /**
      * Create a new controller instance.
      *
@@ -27,36 +24,40 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return array
      */
     public function index()
     {
-      $categories = Category::orderBy('sort')->with(['forums' => function ($query) {
-          $query->orderBy('sort');
-      }])->get();
-      // foreach ($categories as $key => $category) {
-      //     $fields = DB::table('forums')
-      //         ->select('*')
-      //         ->where('category_id', $category['id'])
-      //         ->get();
-      //     //$fields['thread_count'] = Thread::where('forum_id', $fields['id'])->count();
-      //
-      //     $category['forums'][] = $fields;
-      // }
+        $categories = Category::orderBy('sort')
+            ->with([
+                'forums' => function ($query) {
+                    $query->orderBy('sort');
+                }
+            ])
+            ->get();
+        // foreach ($categories as $key => $category) {
+        //     $fields = DB::table('forums')
+        //         ->select('*')
+        //         ->where('category_id', $category['id'])
+        //         ->get();
+        //     //$fields['thread_count'] = Thread::where('forum_id', $fields['id'])->count();
+        //
+        //     $category['forums'][] = $fields;
+        // }
 
-      return $categories;
+        return $categories;
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return array
+     * @throws ValidationException
      */
     public function store(Request $request)
     {
-
-        $this->validate($request,[
+        $this->validate($request, [
             'title' => 'required|string|max:191',
             'description' => 'required|string|max:191',
             'sort' => 'required|integer'
@@ -76,7 +77,7 @@ class CategoryController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show($id)
     {
@@ -86,15 +87,16 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param int $id
+     * @return array
+     * @throws ValidationException
      */
     public function update(Request $request, $id)
     {
         $category = Category::findOrFail($id);
 
-        $this->validate($request,[
+        $this->validate($request, [
             'title' => 'required|string|max:191',
             'description' => 'required|string|max:191',
             'sort' => 'required|integer'
@@ -104,36 +106,43 @@ class CategoryController extends Controller
         return ['message' => 'Updated the category info'];
     }
 
-    public function countTotal() {
-      return ['count' => Category::count()];
+    public function countTotal()
+    {
+        return ['count' => Category::count()];
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return array
+     * @throws AuthorizationException
      */
     public function destroy($id)
     {
-      $this->authorize('isAdmin');
+        $this->authorize('isAdmin');
 
-      $category = Category::findOrFail($id);
-      $category->delete();
+        $category = Category::findOrFail($id);
+        $category->delete();
 
-      return ['message' => 'Category Deleted'];
+        return ['message' => 'Category Deleted'];
     }
 
-    public function search(){
-      if ($search = \Request::get('q')) {
-          $categories = Category::where(function($query) use ($search){
-              $query->where('title','LIKE',"%$search%")
-                      ->orWhere('description','LIKE',"%$search%");
-          })->paginate(20);
-      }else{
-          $categories = Category::latest()->paginate(5);
-      }
+    /**
+     * @return mixed
+     */
+    public function search()
+    {
+        if ($search = \Request::get('q')) {
+            $categories = Category::where(function ($query) use ($search) {
+                $query
+                    ->where('title', 'LIKE', "%$search%")
+                    ->orWhere('description', 'LIKE', "%$search%");
+            })->paginate(20);
+        } else {
+            $categories = Category::latest()->paginate(5);
+        }
 
-      return $categories;
+        return $categories;
     }
 }

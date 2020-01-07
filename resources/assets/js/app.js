@@ -55,6 +55,8 @@ let routes = [
     { path: '/stat', component: require('./components/Highscores.vue') },
     { path: '/forum/:forum_name/:forum_id', component: require('./components/ThreadList.vue') },
     { path: '/thread/:thread_id', component: require('./components/PostList.vue') },
+    { path: '/message', component: require('./components/Message/MessageIndex.vue') },
+    { path: '/message/:message_id', component: require('./components/Message/MessageView.vue') },
     { path: '*', component: require('./components/NotFound.vue') }
   ]
 

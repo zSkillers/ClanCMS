@@ -15,7 +15,11 @@ class CreateStatsTable extends Migration
     {
         Schema::create('stats', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned()->index()->nullable();
+            $table
+                ->integer('user_id')
+                ->unsigned()
+                ->index()
+                ->nullable();
 
             $table->integer('overall_rank');
             $table->integer('overall_level');

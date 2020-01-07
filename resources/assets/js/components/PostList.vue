@@ -16,11 +16,11 @@
       <div class="box-body">
         <template v-for="post in posts.data">
           <postbit
-          :username='post.user.name'
-          avatar='http://zforums.org/data/avatars/l/0/1.jpg?1503969235'
-          :message='post.body'
-          :date='post.created_at'
-          ></postbit>
+            :username='post.user.name'
+            avatar='http://zforums.org/data/avatars/l/0/1.jpg?1503969235'
+            :message='post.body'
+            :date='post.carbon_post'
+        ></postbit>
         </template>
         <div style="overflow-x: scroll;">
             <pagination :data="posts" @pagination-change-page="loadPosts"></pagination>

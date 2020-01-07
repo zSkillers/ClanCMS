@@ -30,7 +30,7 @@
                   <td><router-link :to="'../../thread/' + thread.id + ''"><i v-if="thread.pinned" class="fa fa-map-pin"></i><i v-if="thread.locked" class="fa fa-lock"></i> {{thread.title}}</router-link></td>
                   <td>{{ thread.user.name }}</td>
                   <td>{{ thread.post_count }}</td>
-                  <td>Last UserID Here</td>
+                  <td>{{ thread.last_user_reply.name }}</td>
                   <td class="text-right" v-if="$gate.isAdminOrAuthor() && toggle == 1">
                       <a href="#" @click="pinOrUnpinThread(thread.id)">
                           <i class="fa fa-map-pin blue"></i>
@@ -40,11 +40,11 @@
                           <i class="fa fa-lock blue"></i>
                       </a>
                       /
-                      <a href="#" @click="editModalForum(forum)">
+                      <a href="#" @click="editModalForum(thread)">
                           <i class="fa fa-edit blue"></i>
                       </a>
                       /
-                      <a href="#" @click="deleteForum(forum.id)">
+                      <a href="#" @click="deleteThread(thread.id)">
                           <i class="fa fa-trash red"></i>
                       </a>
 
@@ -114,6 +114,40 @@ export default {
             axios
                 .get(this.$site_url_address + 'api/threads/' + this.$route.params.forum_id + '?page=' + page)
                 .then(response => (this.threads = response.data));
+        },
+
+        deleteThread(id) {
+            swal({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then(result => {
+                // Send request to the server
+                if (result.value) {
+                    axios
+                        .delete(this.$site_url_address + "api/thread/" + id)
+                        .then(() => {
+                            swal(
+                                "Deleted!",
+                                "The thread has been deleted.",
+                                "success"
+                            );
+                            this.loadThreads();
+                            Fire.$emit("AfterCreate");
+                        })
+                        .catch(() => {
+                            swal(
+                                "Failed!",
+                                "There was something wrong¥.",
+                                "warning"
+                            );
+                        });
+                }
+            });
         },
 
         /**

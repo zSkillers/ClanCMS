@@ -8,6 +8,6 @@ class Stat extends Model
 {
     public function users()
     {
-      return $this->belongsTo(App\User::class);
+        return $this->belongsTo(App\User::class);
     }
 }
